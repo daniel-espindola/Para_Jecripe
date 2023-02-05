@@ -1,4 +1,0 @@
-sceneSetups:
-- path: Assets/Resources/Athletics/Scenes/AthleticsGameYohanson.unity
-  isLoaded: 1
-  isActive: 1

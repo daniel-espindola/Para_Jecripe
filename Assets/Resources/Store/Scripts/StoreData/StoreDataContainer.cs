@@ -29,6 +29,7 @@ public class StoreDataContainer
 		stream.Close();
 
 		return storeObjects;
+		Debug.Log("Load");
 	}
 
 
