@@ -1,9 +1,11 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
+using PlayFab;
+using PlayFab.ClientModels;
 using System.Collections;
 
 public class CanoeGameController : MonoBehaviour {
-
+    public PlayfabManager playfab;
     public GameObject canvas;
     public GameObject startCanvas;
     public GameObject gameOverCanvas;
@@ -78,6 +80,7 @@ public class CanoeGameController : MonoBehaviour {
             score[scoreInd] = cac.getName();
         }
         scoreInd++;
+        GrantVirtualCurrency();
     }
 
     void CalculatePosition()
@@ -145,4 +148,22 @@ public class CanoeGameController : MonoBehaviour {
         coins += c;
     }
 
+    public void GrantVirtualCurrency()
+    {
+        var request = new AddUserVirtualCurrencyRequest
+        {
+            VirtualCurrency = "PJ",
+            Amount = 50
+        };
+        PlayFabClientAPI.AddUserVirtualCurrency(request, OnGrantVirtualCurrencySuccess, OnError);
+    }
+    void OnGrantVirtualCurrencySuccess(ModifyUserVirtualCurrencyResult result)
+    {
+        Debug.Log("Currency granted!");
+        playfab.GetVirtualCurrencies();
+    }
+    void OnError(PlayFabError error)
+    {
+        Debug.Log("Error: " + error.ErrorMessage);
+    }
 }

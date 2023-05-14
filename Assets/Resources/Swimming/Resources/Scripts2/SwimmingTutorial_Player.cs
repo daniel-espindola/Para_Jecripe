@@ -5,7 +5,7 @@ public class SwimmingTutorial_Player : MonoBehaviour {
 
 	
 	public bool armStrokesOK;
-	GameObject player;
+	public GameObject player;
 	Timer at; //armStrokesTimer
 	
 	string lastSide;
@@ -13,7 +13,7 @@ public class SwimmingTutorial_Player : MonoBehaviour {
 	Vector3 maxvel;
 	
 
-	public Vector3 rotationVector;
+	Vector3 rotationVector;
 
 	SwimmingSounds sounds;
 

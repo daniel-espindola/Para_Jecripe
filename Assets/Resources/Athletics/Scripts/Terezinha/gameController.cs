@@ -1,8 +1,12 @@
 using UnityEngine;
 using UnityEngine.UI;
+using PlayFab;
+using PlayFab.ClientModels;
 using System.Collections;
 
 public class gameController : MonoBehaviour {
+
+	public PlayfabManager playfabManager;
 
 	public Text result;
 
@@ -162,36 +166,35 @@ public class gameController : MonoBehaviour {
 	public void showPrize(){
 		
 		if ((p==1)) {
-			prizecoins = 1000;
+			prizecoins = 100;
 			first = "Terezinha Guilhermina e \nRafael Lazarini";
 			second = adversary2Script.adversary.name;
 			third = adversaryScript.adversary.name;
 			fourth = adversary3Script.adversary.name;
-	
+			GrantVirtualCurrency();
 
 			//medal = "Parabéns você ganhou medalha de ouro e "+prizecoins +" moedas!";
 		}
 		else if ((p==2)) {
-			prizecoins = 700;
+			prizecoins = 50;
 			first = adversary3Script.adversary.name;
 			second = "Terezinha Guilhermina e \nRafael Lazarini";
 			third = adversaryScript.adversary.name;
 			fourth = adversary2Script.adversary.name;
-
+			GrantVirtualCurrency();
 			//medal = "Parabéns você ganhou medalha de prata e "+prizecoins +" moedas!";
 		}
 		else if ((p==3)) {
-			prizecoins = 500;
+			prizecoins = 25;
 			first = adversary3Script.adversary.name;
 			second = adversary2Script.adversary.name;
 			third = "Terezinha Guilhermina e \nRafael Lazarini";
 			fourth = adversaryScript.adversary.name;
-
+			GrantVirtualCurrency();
 			//medal = "Parabéns você ganhou medalha de bronze e "+prizecoins +" moedas!";;
 		}
 		else if ((p==4)) {
 			//medal = "Não foi dessa vez! Tente mais vezes e conquiste medalhas!";
-			prizecoins = 0;
 			first = adversary3Script.adversary.name;
 			second = adversary2Script.adversary.name;
 			third = adversaryScript.adversary.name;
@@ -249,5 +252,23 @@ public class gameController : MonoBehaviour {
 		
 		
 	}
-	
+
+	void OnError(PlayFabError error)
+	{
+		Debug.Log("Error: " + error.ErrorMessage);
+	}
+	void OnGrantVirtualCurrencySuccess(ModifyUserVirtualCurrencyResult result)
+	{
+		Debug.Log("Currency granted!");
+		playfabManager.GetVirtualCurrencies();
+	}
+	public void GrantVirtualCurrency()
+	{
+		var request = new AddUserVirtualCurrencyRequest
+		{
+			VirtualCurrency = "PJ",
+			Amount = prizecoins
+		};
+		PlayFabClientAPI.AddUserVirtualCurrency(request, OnGrantVirtualCurrencySuccess, OnError);
+	}
 }

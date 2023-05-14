@@ -1,10 +1,14 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
+using PlayFab;
+using PlayFab.ClientModels;
 using System.Collections;
 
 public class gameControllerYohansson : MonoBehaviour {
 
 	public Text result;
+
+	public PlayfabManager playfabManager;
 
 	public string breakRecord = "";
 
@@ -27,7 +31,6 @@ public class gameControllerYohansson : MonoBehaviour {
 	public int prizecoins,p,f;
 
 	public GameObject waitCanvas;
-
 
 
 	void Start () {	
@@ -94,13 +97,39 @@ public class gameControllerYohansson : MonoBehaviour {
 		place3.text = third;
 		place4.text = fourth;
 
-		result.text = "Parabéns, você ganhou "+(playerBehaviour2.bonusnumber+prizecoins) +" moedas!";
-
+		result.text = "Parabéns, você ganhou "+ 50 +" moedas!";
+		Grant();
 
 		end = true;
 
 	}
-
+	public void Grant()
+    {
+		var request = new AddUserVirtualCurrencyRequest
+		{
+			VirtualCurrency = "PJ",
+			Amount = 50
+		};
+		PlayFabClientAPI.AddUserVirtualCurrency(request, OnGrantVirtualCurrencySuccess, OnError);
+	}
+	public void GrantVirtualCurrency()
+	{
+		var request = new AddUserVirtualCurrencyRequest
+		{
+			VirtualCurrency = "OL",
+			Amount = 50
+		};
+		PlayFabClientAPI.AddUserVirtualCurrency(request, OnGrantVirtualCurrencySuccess, OnError);
+	}
+	void OnGrantVirtualCurrencySuccess(ModifyUserVirtualCurrencyResult result)
+	{
+		Debug.Log("Currency granted!");
+		playfabManager.GetVirtualCurrencies();
+	}
+	void OnError(PlayFabError error)
+	{
+		Debug.Log("Error: " + error.ErrorMessage);
+	}
 	void sortedTimes(){
 
 		if (playerBehaviour2.termina ==true && adversaryScript.termina == false && adversary2Script.termina == false && adversary3Script.termina == false){

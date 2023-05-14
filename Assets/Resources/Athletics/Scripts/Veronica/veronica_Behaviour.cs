@@ -1,9 +1,12 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
+using PlayFab;
+using PlayFab.ClientModels;
 using System.Collections;
 
 public class veronica_Behaviour : MonoBehaviour {
 
+    public PlayfabManager playfabManager;
     public bool isTutorial;
     private bool start;
     private bool canRun;
@@ -58,12 +61,10 @@ public class veronica_Behaviour : MonoBehaviour {
             adversaryNames = new string[] { "Manuela Larreta", "Yanis Kyrgiakos", "Ellen Banes", "Mi Yang Fu", "Olga Gouvêia", "Chidinma Essien", "Anouka Aymee", "Marie-Soleil Beau", "Rien Husen", "Liang Jin" };
             ShuffleNames();
             scoreBoardNames = new string[5];
-            defaultText = "Parabéns, seu salto foi válido! Voce ganhou 200 moedas!\n\n";
+            defaultText = "Parabéns, seu salto foi válido! Voce ganhou 50 moedas!\n\n";
         }
         Time.timeScale = 1;
     }
-
-   
     void Update()
     {
         if (canRun == true)
@@ -102,7 +103,6 @@ public class veronica_Behaviour : MonoBehaviour {
             rb.velocity = Vector3.zero;
         }
     }
-
     private void Run()
     {
         if(Input.GetKeyDown(KeyCode.LeftArrow) && pressLeft == true)
@@ -208,6 +208,7 @@ public class veronica_Behaviour : MonoBehaviour {
                 }
                 betweenJumpsText.text = defaultText + scoreText;
                 betweenJumps = false;
+                Grant();
             }
             else
             {
@@ -224,6 +225,28 @@ public class veronica_Behaviour : MonoBehaviour {
         sD = StoreDataContainer.Load();
 		sD.storeObjects[0].coin += n;
         sD.Save();
+        //Grant
+        Grant();
+        Debug.Log("Grant");
+    }
+    public void Grant()
+    {
+        var request = new AddUserVirtualCurrencyRequest
+        {
+            VirtualCurrency = "PJ",
+            Amount = 50
+        };
+        PlayFabClientAPI.AddUserVirtualCurrency(request, OnGrantVirtualCurrencySuccess, OnError);
+    }
+    void OnGrantVirtualCurrencySuccess(ModifyUserVirtualCurrencyResult result)
+    {
+       
+        Debug.Log("Currency granted!");
+        playfabManager.GetVirtualCurrencies();
+    }
+    void OnError(PlayFabError error)
+    {
+        // Debug.Log("Error: " + error.ErrorMessage);
     }
 
     public void Restart()
@@ -310,6 +333,7 @@ public class veronica_Behaviour : MonoBehaviour {
             score = score + (i+1) + "º lugar: " + scoreBoardNames[i] + " - " + scoreBoard[i].ToString("0.00") + "m\n";
         }
         resultText.text = message + score;
+        
     }
 
     private void ShuffleNames()

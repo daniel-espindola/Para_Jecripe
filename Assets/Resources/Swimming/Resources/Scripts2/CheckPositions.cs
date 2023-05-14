@@ -23,14 +23,13 @@ public class CheckPositions : MonoBehaviour {
 	void Start(){
 		sc = GameObject.Find ("SwimmingController").GetComponent<SwimmingGameController>();
 	
-
 	}
 
 
 	void Update(){
 
 		CheckPosition ();
-		yv = transform.localPosition.y;
+		yv = transform.position.y;
 		yz = this.gameObject.transform.position.z;
 	
 	}
@@ -40,7 +39,7 @@ public class CheckPositions : MonoBehaviour {
 
 		if (transform.localPosition.y >= finalY || this.gameObject.transform.position.z >= finalZ) {
 			 
-			CheckIfStopAnimation (go);
+			//CheckIfStopAnimation (go);
 			OponentParticleSystem.SetActive (false);
 
 			if (sc.firstPlace == null) {
@@ -78,10 +77,10 @@ public class CheckPositions : MonoBehaviour {
 
 	}
 
-	void CheckIfStopAnimation(GameObject ath){
-		if(ath.name != "Player"){
-			ath.GetComponent<Animator>().SetBool("Stop",true);
-		}
-	}
+	//void CheckIfStopAnimation(GameObject ath){
+	//	if(ath.name != "Player"){
+	//		ath.GetComponent<Animator>().SetBool("Stop",true);
+	//	}
+	//}
 
 }
