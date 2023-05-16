@@ -3,7 +3,7 @@ using UnityEngine.UI;
 using System.Collections;
 
 public class GameController : MonoBehaviour {
-	
+	public PlayfabManager playfab;
 	public GameObject player;
 	private PlayerController pC;
 	public GameObject pHitArea;
@@ -386,8 +386,9 @@ public class GameController : MonoBehaviour {
 	private void EndGame(string winner, string loser){
 		inGame = false;
 		GameOver.SetActive (true);
-		results.text = "RESULTADO\n1-"+winner+"\n2-"+loser+ "\nVocê ganhou "+points+" moedas";
-
+		//results.text = "RESULTADO\n1-"+winner+"\n2-"+loser+ "\nVocê ganhou "+points+" moedas";
+		results.text = "RESULTADO\n1-" + winner + "\n2-" + loser + "\nVocê ganhou 50 moedas";
+		playfab.GrantVirtualCurrency();
 	}
 
 	void GameWon(){

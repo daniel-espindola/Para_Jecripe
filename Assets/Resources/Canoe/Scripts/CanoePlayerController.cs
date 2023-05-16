@@ -25,7 +25,7 @@ public class CanoePlayerController : MonoBehaviour {
             distanceLeft.value = 0;
         start = false;
         sliderToRight = true;
-        sliderSpeed = 0.02f;
+        sliderSpeed = 0.018f;
         rb = GetComponent<Rigidbody>();
         animator = GetComponent<Animator>();
         isPaused = false;
@@ -73,7 +73,7 @@ public class CanoePlayerController : MonoBehaviour {
             {
                 if(isGame)
                     CanoeGameController.AddCoins(50);
-                rb.velocity += acceleration / 2 * -transform.forward;
+                rb.velocity += acceleration / 1.5f * -transform.forward;
                 paddleSound.SetActive(true);
                 animator.SetTrigger("Paddle");
             }

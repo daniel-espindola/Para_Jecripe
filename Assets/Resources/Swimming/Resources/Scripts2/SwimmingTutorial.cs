@@ -169,7 +169,7 @@ public class SwimmingTutorial : MonoBehaviour
 				GetComponent<SwimmingTutorial_Player> ().armStrokesOK = false;
 				balloon5.GetComponentInChildren<Text> ().text = "Para começar o jogo, aperte ENTER";
 				if(Input.GetKeyDown(KeyCode.Return)){
-					Application.LoadLevel("Swimming");
+					Application.LoadLevel("SwimmingMain");
 				}
 				
 			}

@@ -12,8 +12,10 @@ public class SystemPlayer : MonoBehaviour
     [Header("Others")]
     public Animator anim;
     public bool isWater;
+    public GameObject fimDeJogo;
 
     public SystemMainSwimming systemMain;
+    bool fimdogame;
     void Start()
     {
         anim = GetComponent<Animator>();
@@ -22,7 +24,7 @@ public class SystemPlayer : MonoBehaviour
     {
         instance = this;
     }
-    private void FixedUpdate()
+    private void Update()
     {
         //Move player
         if(systemMain.pauseGame == false && systemMain.startGame == true)
@@ -54,7 +56,10 @@ public class SystemPlayer : MonoBehaviour
             {
                 //anim.SetInteger("setInt", 0);
             }
-
+            if (fimdogame == true)
+            {
+                systemMain.winPlayer = true;
+            }
             isWater = true;
         } 
     }
@@ -68,8 +73,13 @@ public class SystemPlayer : MonoBehaviour
     {
         if (other.CompareTag("Win"))
         {
-            Debug.Log("Win");
-            systemMain.winPlayer = true; 
+            //Debug.Log("Win");
+            Debug.Log(fimdogame);
+            systemMain.winPlayer = true;
+            systemMain.ShowWin();
+            fimDeJogo.SetActive(true);
+            fimdogame = true;
+            
         }
     }
 }

@@ -91,11 +91,11 @@ public class SystemMainSwimming : MonoBehaviour
             {
                 GameOver();
             }
-            if (oxygenPlayer <= 180)
+            if (oxygenPlayer <= 345)
             {
                 avisoOxygen.SetActive(true);
             }
-            if (oxygenPlayer >= 180)
+            if (oxygenPlayer >= 345)
             {
                 avisoOxygen.SetActive(false);
             }
@@ -122,7 +122,7 @@ public class SystemMainSwimming : MonoBehaviour
         if (Input.GetKey(KeyCode.Space))
         {
             fxOxygen.Play();
-            oxygenPlayer = 365;
+            oxygenPlayer = 685;
         }
         
     }
@@ -154,8 +154,9 @@ public class SystemMainSwimming : MonoBehaviour
     {
         applauseAudio.Play();
         fxSwimming.mute = true;
-        winPlayer = false;
+        winPlayer = true;
         winPanel.SetActive(true);
+        Debug.Log("Show Win");
     }
     //Pause Game
     public void PauseGamePlay()
@@ -250,7 +251,7 @@ public class SystemMainSwimming : MonoBehaviour
         var request = new AddUserVirtualCurrencyRequest
         {
             VirtualCurrency = "PJ",
-            Amount = 10
+            Amount = 1
         };
         PlayFabClientAPI.AddUserVirtualCurrency(request, OnGrantVirtualCurrencySuccess, OnError);
     }
