@@ -3,6 +3,7 @@ using UnityEngine.UI;
 using PlayFab;
 using PlayFab.ClientModels;
 using System.Collections;
+using UnityEngine.SceneManagement;
 
 public class veronica_Behaviour : MonoBehaviour {
 
@@ -40,8 +41,10 @@ public class veronica_Behaviour : MonoBehaviour {
 	LongJumpSounds sounds;
     public GameObject sandParticles;
 
+    bool vai;
+
     // Use this for initialization
-    void Start ()
+    void Start()
     {
         rb = GetComponent<Rigidbody>();
         rb.useGravity = false;
@@ -49,7 +52,7 @@ public class veronica_Behaviour : MonoBehaviour {
         if (isTutorial == false)
         {
             sandParticles.SetActive(false);
-			sounds = GameObject.Find ("Sounds").GetComponent<LongJumpSounds> ();
+            sounds = GameObject.Find("Sounds").GetComponent<LongJumpSounds>();
             personalScore = new float[] { -1f, -1f, -1f };
             jumpNumber = 0;
             pointsText.text = "0";
@@ -83,29 +86,30 @@ public class veronica_Behaviour : MonoBehaviour {
         {
             Jump();
         }
-        if (isJumping == true && isTutorial == false) {
+        if (isJumping == true && isTutorial == false)
+        {
             CalculateJumpDistance();
         }
         if (transform.position.x < invalid_jump.position.x && jumpFailed == true && isTutorial == false)
         {
             JumpFailed();
         }
-        if (betweenJumps == true && isTutorial==false)
+        if (betweenJumps == true && isTutorial == false)
         {
             BetweenJumps();
         }
-        if (-rb.velocity.x > 0 && canJump == false && isJumping==false)
+        if (-rb.velocity.x > 0 && canJump == false && isJumping == false)
         {
             rb.velocity -= (acceleration / 12) * -transform.forward;
         }
-        else if(-rb.velocity.x<0)
+        else if (-rb.velocity.x < 0)
         {
             rb.velocity = Vector3.zero;
         }
     }
     private void Run()
     {
-        if(Input.GetKeyDown(KeyCode.LeftArrow) && pressLeft == true)
+        if (Input.GetKeyDown(KeyCode.LeftArrow) && pressLeft == true)
         {
             leftFoot.SetActive(false);
             rightFoot.SetActive(true);
@@ -120,7 +124,7 @@ public class veronica_Behaviour : MonoBehaviour {
             rightFoot.SetActive(false);
             leftFoot.SetActive(true);
             pressLeft = true;
-            if(-rb.velocity.x <= maxSpeed)
+            if (-rb.velocity.x <= maxSpeed)
             {
                 rb.velocity += acceleration * -transform.forward;
             }
@@ -140,7 +144,14 @@ public class veronica_Behaviour : MonoBehaviour {
             jumpMessage.SetActive(false);
             rightFoot.SetActive(false);
             leftFoot.SetActive(false);
-            rb.AddForce(Vector3.up * 250f);
+            if (SceneManager.GetActiveScene().name.Contains("utorial"))
+            {
+                rb.AddForce(Vector3.up * 70f);
+            }
+            else
+            {
+                rb.AddForce(Vector3.up * 250f);
+            }
             animator.SetBool("jump", true);
             isJumping = true;
             canRun = false;
@@ -187,12 +198,12 @@ public class veronica_Behaviour : MonoBehaviour {
     {
         if (Time.time > timer + 2.5f)
         {
-            if(jumpFailed == false)
+            if (jumpFailed == false)
             {
                 betweenJumpsWindow.SetActive(true);
-				sounds.PlayAudio (sounds.applause);
+                sounds.PlayAudio(sounds.applause);
                 string scoreText = "";
-                for (int i = 0; i< 3; i++)
+                for (int i = 0; i < 3; i++)
                 {
                     if (personalScore[i] >= 0)
                     {
@@ -223,7 +234,7 @@ public class veronica_Behaviour : MonoBehaviour {
         points += n;
         pointsText.text = "" + points;
         sD = StoreDataContainer.Load();
-		sD.storeObjects[0].coin += n;
+        sD.storeObjects[0].coin += n;
         sD.Save();
         //Grant
         Grant();
@@ -240,7 +251,7 @@ public class veronica_Behaviour : MonoBehaviour {
     }
     void OnGrantVirtualCurrencySuccess(ModifyUserVirtualCurrencyResult result)
     {
-       
+
         Debug.Log("Currency granted!");
         playfabManager.GetVirtualCurrencies();
     }
@@ -261,11 +272,10 @@ public class veronica_Behaviour : MonoBehaviour {
 
     public void ContinueButton()
     {
-		
         betweenJumps = false;
         if (jumpFailed == false)
         {
-            AddPoints(200);
+            //AddPoints(200);
         }
         betweenJumpsWindow.SetActive(false);
         jumpFailedMessage.SetActive(false);
@@ -330,17 +340,17 @@ public class veronica_Behaviour : MonoBehaviour {
         }
         for (int i = 0; i < 5; i++)
         {
-            score = score + (i+1) + "º lugar: " + scoreBoardNames[i] + " - " + scoreBoard[i].ToString("0.00") + "m\n";
+            score = score + (i + 1) + "º lugar: " + scoreBoardNames[i] + " - " + scoreBoard[i].ToString("0.00") + "m\n";
         }
         resultText.text = message + score;
-        
+
     }
 
     private void ShuffleNames()
     {
         for (int i = 9; i > 0; i--)
         {
-            int r = Random.Range(0, i+1);
+            int r = Random.Range(0, i + 1);
             string tmp = adversaryNames[i];
             adversaryNames[i] = adversaryNames[r];
             adversaryNames[r] = tmp;
@@ -352,7 +362,7 @@ public class veronica_Behaviour : MonoBehaviour {
         rb.useGravity = false;
         sandParticles.SetActive(false);
         jumpNumber++;
-        rb.velocity = new Vector3(0f,0f,0f);
+        rb.velocity = new Vector3(0f, 0f, 0f);
         pressLeft = true;
         rightFoot.SetActive(false);
         leftFoot.SetActive(true);
@@ -365,5 +375,5 @@ public class veronica_Behaviour : MonoBehaviour {
         animator.SetFloat("speed", 0.0f);
         transform.position = new Vector3(60.95f, 3.9f, 152.71f);
     }
-    
+
 }

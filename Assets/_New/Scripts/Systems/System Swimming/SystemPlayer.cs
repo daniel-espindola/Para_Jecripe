@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Playables;
 
 public class SystemPlayer : MonoBehaviour
 {
@@ -13,7 +14,15 @@ public class SystemPlayer : MonoBehaviour
     public Animator anim;
     public bool isWater;
     public GameObject fimDeJogo;
+    //[Header("TimeLine System")]
+    //public PlayableDirector directorL;
+    //public PlayableDirector directorR;
+    //public bool lOrR;
 
+    int timeAnim;
+    bool R;
+    bool L;
+    bool setAnim;
     public SystemMainSwimming systemMain;
     bool fimdogame;
     void Start()
@@ -22,35 +31,46 @@ public class SystemPlayer : MonoBehaviour
     }
     private void Awake()
     {
+        timeAnim = 15;
+        //TimeLinesOff();
         instance = this;
     }
-    private void Update()
+    private void FixedUpdate()
     {
         //Move player
         if(systemMain.pauseGame == false && systemMain.startGame == true)
         {
-            if (Input.GetKey(KeyCode.LeftArrow))
+            if (Input.GetKey(KeyCode.LeftArrow) && L == true)
             {
                 transform.position += Vector3.forward * speed;
-                anim.SetInteger("setInt", 1);
+                R = true;
+                //anim.SetInteger("setInt", 1);
+                //timeAnim--;
+                //anim.SetInteger("setInt", 1);                
             }
-            if (Input.GetKeyUp(KeyCode.LeftArrow))
+            //else if(Input.GetKeyUp(KeyCode.LeftArrow) && timeAnim < 0)
+            //{
+            //    //transform.position -= Vector3.forward * speed*Time.deltaTime;
+            //    //transform.position = transform.position + new Vector3(0, 0, speed * Time.deltaTime);
+            //    //anim.SetInteger("setInt", 0);
+            //    timeAnim = 15;
+            //}
+            //else if(Input.GetKeyUp(KeyCode.RightArrow) && timeAnim < 0)
+            //{
+            //    //transform.position -= Vector3.forward * speed * Time.deltaTime;
+            //    //transform.position = transform.position + new Vector3(0, 0, speed * Time.deltaTime);
+            //    //anim.SetInteger("setInt", 0);
+            //    timeAnim = 15; 
+            //}
+            if (Input.GetKey(KeyCode.RightArrow) && R == true)
             {
                 transform.position += Vector3.forward * speed;
+                L = true;
+                //anim.SetInteger("setInt", 2);
+                //timeAnim--;
+                //setAnim = true;
                 //transform.position = transform.position + new Vector3(0, 0, speed * Time.deltaTime);
-                anim.SetInteger("setInt", 0);
-            }
-            if (Input.GetKeyUp(KeyCode.RightArrow))
-            {
-                transform.position += Vector3.forward * speed;
-                //transform.position = transform.position + new Vector3(0, 0, speed * Time.deltaTime);
-                anim.SetInteger("setInt", 0);
-            }
-            if (Input.GetKey(KeyCode.RightArrow))
-            {
-                transform.position += Vector3.forward * speed;
-                //transform.position = transform.position + new Vector3(0, 0, speed * Time.deltaTime);
-                anim.SetInteger("setInt", 2);
+                //anim.SetInteger("setInt", 2);
             }
             else
             {
@@ -61,7 +81,25 @@ public class SystemPlayer : MonoBehaviour
                 systemMain.winPlayer = true;
             }
             isWater = true;
+            Debug.Log(timeAnim);
+            
         } 
+    }
+    private void Update()
+    {
+        ControllerAnim();
+    }
+    private void LateUpdate()
+    {
+        if(L == true)
+        {
+            R = false;
+        }
+
+        if(L == false)
+        {
+            R = true;
+        }
     }
     public void WaterPlayer()
     {
@@ -80,6 +118,39 @@ public class SystemPlayer : MonoBehaviour
             fimDeJogo.SetActive(true);
             fimdogame = true;
             
+        }
+    }
+    //TimeLine
+    //public void StartTimeLineL()
+    //{
+    //    directorL.Play();
+    //    directorR.Pause();
+    //}
+    //public void StartTimeLineR()
+    //{
+    //    directorL.Pause();
+    //    directorR.Play();
+    //}
+    //public void TimeLinesOff()
+    //{
+    //    directorL.Pause();
+    //    directorR.Pause();
+    //}
+    private void ControllerAnim()
+    {
+        if (Input.GetKey(KeyCode.LeftArrow))
+        {
+           anim.SetInteger("setInt", 1);
+           Debug.Log("L");
+        }
+        else if (Input.GetKey(KeyCode.RightArrow))
+        {
+            anim.SetInteger("setInt", 2);
+            Debug.Log("R");
+        }
+        else
+        {
+            anim.SetInteger("setInt", 0);
         }
     }
 }
