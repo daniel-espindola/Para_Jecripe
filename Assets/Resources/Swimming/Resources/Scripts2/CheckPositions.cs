@@ -29,10 +29,10 @@ public class CheckPositions : MonoBehaviour {
 	void Update(){
 
 		CheckPosition ();
-		yv = transform.position.y;
-		yz = this.gameObject.transform.position.z;
-	
-	}
+        yv = transform.position.y;
+        yz = this.gameObject.transform.position.z;
+
+    }
 
 
 	void CheckPosition(){

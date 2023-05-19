@@ -61,6 +61,7 @@ public class SwimmingGameController : MonoBehaviour
 
 	Vector3 rotationVector;
 
+	public float rotateNew;
 	void Start()
 	{
 
@@ -88,17 +89,19 @@ public class SwimmingGameController : MonoBehaviour
 
 		if (isMasculine)
 		{
-			rotationVector.x = 0;
-			rotationVector.y = 180;
-		}
+            rotationVector.x = 0;
+            rotationVector.y = 180;
+        }
 		else
 		{
-			rotationVector.x = 75;
-			rotationVector.y = 0;
-		}
-		rotationVector.z = 0;
+            rotationVector.x = 75;
+            rotationVector.y = 0;
+            rotationVector.x = rotateNew;
+            rotationVector.y = 0;
+        }
+        //rotationVector.z = 0;
 
-		points = 0;
+        points = 0;
 		lastSide = "left";
 	}
 
@@ -116,7 +119,7 @@ public class SwimmingGameController : MonoBehaviour
 		{
 			PauseGame();
 		}
-		rotationVector.x = 0;
+		////rotationVector.x = 0;
 	}
 
 	void ArmStroke(string thisSide, string sideTrigger)
@@ -136,12 +139,12 @@ public class SwimmingGameController : MonoBehaviour
 			WaterParticleSystem(thisSide);
 
 
-			//player.GetComponent<Transform>().eulerAngles = new Vector3(0,0,0);
-			player.transform.rotation = Quaternion.Euler(rotationVector);
-			//player.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeRotationX;
+            //player.GetComponent<Transform>().eulerAngles = new Vector3(0,0,0);
+            player.transform.rotation = Quaternion.Euler(rotationVector);
+            //player.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeRotationX;
 
 
-		}
+        }
 		else
 		{
 			at.ResetTimer();
@@ -172,15 +175,14 @@ public class SwimmingGameController : MonoBehaviour
 
 	void addPoints(int addPoints)
 	{
-		points += addPoints;
-		pointText.text = points.ToString();
-		fc.coinFallAnimation();
-		sD = StoreDataContainer.Load();
-		sD.storeObjects[0].coin += addPoints;
-		sD.Save();
+		//points += addPoints;
+		//pointText.text = points.ToString();
+		//fc.coinFallAnimation();
+		//sD = StoreDataContainer.Load();
+		//sD.storeObjects[0].coin += addPoints;
+		//sD.Save();
 
 	}
-
 
 	public void StartGame()
 	{

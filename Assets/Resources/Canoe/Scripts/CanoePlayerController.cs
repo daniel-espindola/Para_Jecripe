@@ -2,11 +2,13 @@
 using UnityEngine.UI;
 using System.Collections;
 
-public class CanoePlayerController : MonoBehaviour {
-    
+public class CanoePlayerController : MonoBehaviour
+{
+
     public Slider slider;
     public Slider distanceLeft;
-    private float sliderSpeed;
+    [SerializeField]
+    private float sliderSpeed = 0.018f;
     private bool sliderToRight;
     private Rigidbody rb;
     private Animator animator;
@@ -18,32 +20,32 @@ public class CanoePlayerController : MonoBehaviour {
     private CanoeGameController cgc;
     public static bool isPaused;
 
-	// Use this for initialization
-	void Start () {
+    // Use this for initialization
+    void Start()
+    {
         paddleSound.SetActive(false);
-        if(isGame)
+        if (isGame)
             distanceLeft.value = 0;
         start = false;
         sliderToRight = true;
-        sliderSpeed = 0.018f;
         rb = GetComponent<Rigidbody>();
         animator = GetComponent<Animator>();
         isPaused = false;
-	}
-	
-	// Update is called once per frame
-	void Update ()
+    }
+
+    // Update is called once per frame
+    void Update()
     {
         if (start == true)
         {
-            if(!isPaused)
+            if (!isPaused)
                 MoveSlider();
             Move();
-            if(isGame)
+            if (isGame)
                 distanceLeft.value = -transform.position.z / 191.2f;
         }
         else
-        {            
+        {
             if (Input.GetKeyDown(KeyCode.Space) && rb.velocity == Vector3.zero) start = true;
         }
         Stop();
@@ -63,7 +65,7 @@ public class CanoePlayerController : MonoBehaviour {
         {
             if ((slider.value >= 0.4f && slider.value <= 0.6f) && (rb.velocity.magnitude < maxSpeed))
             {
-                if(isGame)
+                if (isGame)
                     CanoeGameController.AddCoins(100);
                 rb.velocity += acceleration * -transform.forward;
                 paddleSound.SetActive(true);
@@ -71,7 +73,7 @@ public class CanoePlayerController : MonoBehaviour {
             }
             else if (((slider.value >= 0.2f && slider.value < 0.4f) || (slider.value > 0.6f && slider.value <= 0.8f)) && (rb.velocity.magnitude < maxSpeed))
             {
-                if(isGame)
+                if (isGame)
                     CanoeGameController.AddCoins(50);
                 rb.velocity += acceleration / 1.5f * -transform.forward;
                 paddleSound.SetActive(true);
@@ -86,7 +88,8 @@ public class CanoePlayerController : MonoBehaviour {
         }
     }
 
-    void Stop() {
+    void Stop()
+    {
 
         if (-rb.velocity.z > 0.01f) rb.velocity -= acceleration / 100 * -transform.forward;
         else
