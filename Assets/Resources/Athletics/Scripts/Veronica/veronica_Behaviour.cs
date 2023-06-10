@@ -5,7 +5,8 @@ using PlayFab.ClientModels;
 using System.Collections;
 using UnityEngine.SceneManagement;
 
-public class veronica_Behaviour : MonoBehaviour {
+public class veronica_Behaviour : MonoBehaviour
+{
 
     public PlayfabManager playfabManager;
     public bool isTutorial;
@@ -38,7 +39,7 @@ public class veronica_Behaviour : MonoBehaviour {
     private float[] scoreBoard;
     private string[] scoreBoardNames;
     private StoreDataContainer sD;
-	LongJumpSounds sounds;
+    LongJumpSounds sounds;
     public GameObject sandParticles;
 
     bool vai;
@@ -60,11 +61,11 @@ public class veronica_Behaviour : MonoBehaviour {
             resultCanvas.SetActive(false);
             betweenJumpsWindow.SetActive(false);
             jumpFailedMessage.SetActive(false);
-            scoreBoard = new float[] { 0f, Random.Range(3.4f, 4.8f), Random.Range(4.0f, 4.9f), Random.Range(4.2f, 4.9f), Random.Range(4.5f, 5.0f) };
+            scoreBoard = new float[] { 0f, Random.Range(3.4f, 5.2f), Random.Range(4.0f, 5.3f), Random.Range(4.2f, 5f), Random.Range(4.5f, 5.5f) };
             adversaryNames = new string[] { "Manuela Larreta", "Yanis Kyrgiakos", "Ellen Banes", "Mi Yang Fu", "Olga Gouvêia", "Chidinma Essien", "Anouka Aymee", "Marie-Soleil Beau", "Rien Husen", "Liang Jin" };
             ShuffleNames();
             scoreBoardNames = new string[5];
-            defaultText = "Parabéns, seu salto foi válido! Voce ganhou 50 moedas!\n\n";
+            defaultText = "Parabéns, seu salto foi válido!\n Voce ganhou 50 moedas!\n\n";
         }
         Time.timeScale = 1;
     }
@@ -205,6 +206,8 @@ public class veronica_Behaviour : MonoBehaviour {
                 string scoreText = "";
                 for (int i = 0; i < 3; i++)
                 {
+                    Debug.Log("TESTE");
+                    Debug.Log(i + ": " + personalScore[i]);
                     if (personalScore[i] >= 0)
                     {
                         if (personalScore[i] != 0)
@@ -233,9 +236,6 @@ public class veronica_Behaviour : MonoBehaviour {
     {
         points += n;
         pointsText.text = "" + points;
-        sD = StoreDataContainer.Load();
-        sD.storeObjects[0].coin += n;
-        sD.Save();
         //Grant
         Grant();
         Debug.Log("Grant");
