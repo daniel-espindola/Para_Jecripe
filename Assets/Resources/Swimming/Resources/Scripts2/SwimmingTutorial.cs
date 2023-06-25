@@ -5,7 +5,7 @@ using UnityEngine.UI;
 public class SwimmingTutorial : MonoBehaviour
 {
 
-
+    public SwimmingTutorial_Player swimmingTutorial_Player;
     public Text balloonText1;
     GameObject balloon2;
     GameObject balloon3;
@@ -18,6 +18,7 @@ public class SwimmingTutorial : MonoBehaviour
     bool part3;
     bool part4;
     public bool part5;
+    Vector3 rotationVector = new Vector3(-90, 180, 0);
 
     public GameObject settingsCanvas;
 
@@ -53,11 +54,18 @@ public class SwimmingTutorial : MonoBehaviour
 
     void JumpIntoWater()
     {
-
         GameObject.Find("Player").GetComponent<Animator>().SetBool("jumpp", true);
         GameObject.Find("PlayerParent").GetComponent<Animator>().SetTrigger("Jump");
 
+        Invoke("RotatePlayer", 1.2f);
+        swimmingTutorial_Player.Jump();
 
+    }
+
+    void RotatePlayer()
+    {
+        var player = GameObject.Find("Player");
+        player.transform.rotation = Quaternion.Euler(rotationVector);
     }
 
     void Update()
@@ -203,7 +211,7 @@ public class SwimmingTutorial : MonoBehaviour
                 balloon5.GetComponentInChildren<Text>().text = "Para começar o jogo, aperte ENTER";
                 if (Input.GetKeyDown(KeyCode.Return))
                 {
-                    Application.LoadLevel("FemaleSwimming");
+                    Application.LoadLevel("SwimmingMainV4");
                 }
 
             }

@@ -4,7 +4,11 @@ using UnityEngine;
 
 public class SystemOponents : MonoBehaviour
 {
+    [Header("System Settings")]
     public SystemMainSwimming systemMain;
+    public bool iSSystemMain;
+    public SystemMainSwimmingV4 systemMainV4;
+    public bool iSSystemMainV4;
 
     [Header("Oponents Settings")]
     public GameObject oponents;
@@ -24,19 +28,39 @@ public class SystemOponents : MonoBehaviour
     }
     void Update()
     {
-        if(systemMain.pauseGame == false && systemMain.startGame == true && isWater == true)
+        if(iSSystemMain == true)
         {
-            transform.position += Vector3.forward * speed;
-            start = true;
+            if (systemMain.pauseGame == false && systemMain.startGame == true && isWater == true)
+            {
+                transform.position += Vector3.forward * speed;
+                start = true;
+            }
+            if (start == false && systemMain.startGame == true && systemMain.pauseGame == false)
+            {
+                oponents.transform.rotation = Quaternion.Euler(rX, rY, rZ);
+                transform.position = transform.position = new Vector3(X, Y, Z);
+                timeLine.SetActive(true);
+                render.SetActive(true);
+                isWater = true;
+            }
         }
-        if (start == false && systemMain.startGame == true && systemMain.pauseGame == false)
+        if (iSSystemMainV4 == true)
         {
-            oponents.transform.rotation = Quaternion.Euler(rX, rY, rZ);
-            transform.position = transform.position = new Vector3(X, Y, Z);
-            timeLine.SetActive(true);
-            render.SetActive(true);
-            isWater = true;
+            if (systemMainV4.isPaused == false && systemMain.startGame == true && isWater == true)
+            {
+                transform.position += Vector3.forward * speed;
+                start = true;
+            }
+            if (systemMainV4.gameStart == true && systemMainV4.isPaused == false)
+            {
+                oponents.transform.rotation = Quaternion.Euler(rX, rY, rZ);
+                transform.position = transform.position = new Vector3(X, Y, Z);
+                timeLine.SetActive(true);
+                render.SetActive(true);
+                isWater = true;
+            }
         }
+
     }
     private void LateUpdate()
     {

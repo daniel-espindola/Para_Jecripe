@@ -22,6 +22,9 @@ public class SystemMainSwimming : MonoBehaviour
     public int timeGame;
     public float oxygenPlayer;
     public string sceneName;
+    public GameObject player;
+    public GameObject playerParent;
+    public SwimmingTutorial_Player swimmingTutorial_Player;
     [Header("UI Settings")]
     //Panels
     public GameObject pausePanel;
@@ -138,11 +141,18 @@ public class SystemMainSwimming : MonoBehaviour
                 avisoStart.SetActive(false);
                 systemPlayer.WaterPlayer();
                 systemPlayerV3.WaterPlayer();
+                swimmingTutorial_Player.armStrokesOK = true;
+                JumpIntoWater();
                 isWaterAudio.Play();
                 backAudio.Play();
             }
         }
         
+    }
+    void JumpIntoWater()
+    {
+        player.GetComponent<Animator>().SetBool("jumpp", true);
+        playerParent.GetComponentInParent<Animator>().SetTrigger("Jump");
     }
     //GameOver
     public void GameOver()

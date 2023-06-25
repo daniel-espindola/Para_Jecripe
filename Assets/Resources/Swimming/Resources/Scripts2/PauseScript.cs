@@ -2,12 +2,18 @@
 using System.Collections;
 
 public class PauseScript : MonoBehaviour {
+	
+	private static PauseScript instance;
 
 	GameObject  pauseCanvas;
 	GameObject canvas1;
-
+	public bool isPause;
 	public GameObject settingsCanvas;
-	
+
+	void Awake()
+	{
+		instance = this;
+	}
 	void Start(){
 		
 		pauseCanvas = GameObject.Find ("PauseCanvas");
@@ -21,8 +27,12 @@ public class PauseScript : MonoBehaviour {
 		
 		if(Input.GetKeyDown(KeyCode.P)){
 			PauseGame();
+			isPause = true;
 		}
-	
+	else
+        {
+			isPause = false;
+		}
 	}
 	
 	public void PauseGame(){
@@ -31,7 +41,8 @@ public class PauseScript : MonoBehaviour {
 			Time.timeScale = 0;
 			pauseCanvas.SetActive(true);
 			canvas1.SetActive(false);
-		} else if(Time.timeScale == 0){
+		} 
+		else if(Time.timeScale == 0){
 			Time.timeScale = 1;
 			pauseCanvas.SetActive(false);
 			settingsCanvas.SetActive (false);
