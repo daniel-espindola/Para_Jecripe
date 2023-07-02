@@ -15,8 +15,8 @@ public class PositionPlayerInGame : MonoBehaviour
     public Text titulo;
     public SystemMainSwimmingV4 swimmingV4;
     public string sceneName;
-    string vitoria = "Vocï¿½ Ganhou!";
-    string derrota = "Vocï¿½ Perdeu!";
+    string vitoria = "Você Ganhou!";
+    string derrota = "Você Perdeu!";
     bool finaldojogo;
 
     public Text place1Text;
@@ -30,8 +30,8 @@ public class PositionPlayerInGame : MonoBehaviour
     void Start()
     {
         place1Name = "Clodoaldo Silva";
-        place2Name = "Jeremias Hernandez";
-        place3Name = "Gehardus Swart";
+        place2Name = "Opponent 01";
+        place3Name = "Opponent 02";
     }
 
     void Update()

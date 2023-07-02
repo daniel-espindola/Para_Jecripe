@@ -141,6 +141,7 @@ public class SystemMainSwimmingV4 : MonoBehaviour
         isGameOver = true;
         gameOverObject.SetActive(true);
         isBreathing = false;
+        gameStart = false;
         //StartCoroutine(RestartScene(gameOverDelay));
         //RestartSceneV2();
     }
@@ -149,6 +150,7 @@ public class SystemMainSwimmingV4 : MonoBehaviour
         isGameOver = true;
         withoutOxygen.SetActive(true);
         isBreathing = false;
+        gameStart = false;
     }
 
     public void Victory()
@@ -156,6 +158,7 @@ public class SystemMainSwimmingV4 : MonoBehaviour
         isVictory = true;
         victoryObject.SetActive(true);
         isBreathing = false;
+        gameStart = false;
         //StartCoroutine(RestartScene(victoryDelay));
         //RestartSceneV2();
     }
