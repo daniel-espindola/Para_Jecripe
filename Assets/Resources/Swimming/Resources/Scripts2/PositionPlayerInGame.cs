@@ -15,6 +15,11 @@ public class PositionPlayerInGame : MonoBehaviour
     public Text titulo;
     public SystemMainSwimmingV4 swimmingV4;
     public string sceneName;
+    [Header("CoinManager")]
+    public CoinManager coinManager;
+    public int primeiro;
+    public int segundo;
+    public int terceiro;
     string vitoria = "Você Ganhou!";
     string derrota = "Você Perdeu!";
     bool finaldojogo;
@@ -40,16 +45,19 @@ public class PositionPlayerInGame : MonoBehaviour
         {
             currentposition = 1;
             currentpositionText.text = currentposition.ToString();
+            coinManager.AddCoins(primeiro);
         }
         else if (player.position.z < opponent.position.z && player.position.z > opponent2.position.z && opponent2.position.z < opponent.position.z || player.position.z > opponent.position.z && player.position.z < opponent2.position.z && opponent2.position.z > opponent.position.z)
         {
             currentposition = 2;
             currentpositionText.text = currentposition.ToString();
+            coinManager.AddCoins(segundo);
         }
         else if (player.position.z < opponent.position.z && player.position.z < opponent2.position.z)
         {
             currentposition = 3;
             currentpositionText.text = currentposition.ToString();
+            coinManager.AddCoins(terceiro);
         }
 
         if (currentposition != finalPosition)

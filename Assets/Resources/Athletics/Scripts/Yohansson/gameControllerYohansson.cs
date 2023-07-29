@@ -6,6 +6,8 @@ using System.Collections;
 
 public class gameControllerYohansson : MonoBehaviour {
 
+	public CoinManager coinManager;
+
 	public Text result;
 
 	public PlayfabManager playfabManager;
@@ -98,8 +100,8 @@ public class gameControllerYohansson : MonoBehaviour {
 		place4.text = fourth;
 
 		result.text = "Parabéns, você ganhou "+ 50 +" moedas!";
-		Grant();
-
+		//Grant();
+		coinManager.AddCoins(50);
 		end = true;
 
 	}

@@ -6,6 +6,7 @@ using System.Collections;
 
 public class CanoeGameController : MonoBehaviour {
     public PlayfabManager playfab;
+    public CoinManager coin;
     public GameObject canvas;
     public GameObject startCanvas;
     public GameObject gameOverCanvas;
@@ -54,7 +55,7 @@ public class CanoeGameController : MonoBehaviour {
             string timeStr = ((int)time / 60).ToString("00") + ":" + ((int)time % 60).ToString("00") + ":" + (int)((time-(int)time)*100);
             timeText.text = timeStr;
             CalculatePosition();
-            coinsText.text = "" + coins;
+            coinsText.text = "Você recebeu"+"25"+"moedas.";
         }
 	}
 
@@ -80,7 +81,7 @@ public class CanoeGameController : MonoBehaviour {
             score[scoreInd] = cac.getName();
         }
         scoreInd++;
-        GrantVirtualCurrency();
+        coin.AddCoins(25);
     }
 
     void CalculatePosition()

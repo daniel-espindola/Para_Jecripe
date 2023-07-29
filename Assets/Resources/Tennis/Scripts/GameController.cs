@@ -4,6 +4,11 @@ using System.Collections;
 
 public class GameController : MonoBehaviour
 {
+    public CoinManager coinManager;
+    public int primeirolugar;
+    public int gameOver;
+    //public Text coinstext;
+
     public PlayfabManager playfab;
     public GameObject player;
     private PlayerController pC;
@@ -128,6 +133,7 @@ public class GameController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        //coinstext.text = coinManager.GetCoins().ToString();
 
         if (Input.GetKeyDown(KeyCode.P))
         {
@@ -214,6 +220,7 @@ public class GameController : MonoBehaviour
                 playerScore++;
                 scoreMessage.text = "Ponto Player";
                 ShowPoints();
+                coinManager.AddCoins(2);
             }
             if (playerScore == 4 && enemyScore < 3)
             {
@@ -228,6 +235,7 @@ public class GameController : MonoBehaviour
                 enemyScore = 0;
                 playerScore = 0;
                 serve *= -1;
+                coinManager.AddCoins(primeirolugar);
             }
             else if (enemyScore == 4 && playerScore < 3)
             {
@@ -237,6 +245,7 @@ public class GameController : MonoBehaviour
                 enemyScore = 0;
                 playerScore = 0;
                 serve *= -1;
+                coinManager.AddCoins(gameOver);
             }
             else if (enemyScore == 4 && playerScore == 4)
             {
@@ -244,6 +253,7 @@ public class GameController : MonoBehaviour
                 playerScore = 3;
                 enemyScore = 3;
                 ShowPoints();
+                coinManager.AddCoins(gameOver);
             }
             else if (playerScore == 5)
             {
@@ -254,6 +264,7 @@ public class GameController : MonoBehaviour
                 enemyScore = 0;
                 playerScore = 0;
                 serve *= -1;
+                coinManager.AddCoins(primeirolugar);
             }
             else if (enemyScore == 5)
             {
@@ -263,6 +274,7 @@ public class GameController : MonoBehaviour
                 enemyScore = 0;
                 playerScore = 0;
                 serve *= -1;
+                coinManager.AddCoins(gameOver);
             }
             if (playerGameCount == 2)
             {
@@ -275,6 +287,7 @@ public class GameController : MonoBehaviour
                 ShowSetScore();
                 playerGameCount = 0;
                 enemyGameCount = 0;
+                coinManager.AddCoins(primeirolugar);
             }
             else if (enemyGameCount == 2)
             {
@@ -283,6 +296,8 @@ public class GameController : MonoBehaviour
                 ShowSetScore();
                 playerGameCount = 0;
                 enemyGameCount = 0;
+                coinManager.AddCoins(gameOver);
+
             }
         }
         if (playerSetCount == 2)

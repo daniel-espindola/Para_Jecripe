@@ -5,6 +5,10 @@ using UnityEngine.UI;
 public class SwimmingGameController : MonoBehaviour
 {
 
+	public CoinManager coinManager;
+	public int coinPrimeiroLugar;
+	public int coinGameOver;
+
 	GameObject player;
 	Timer at;
 	Vector3 maxvel;
@@ -220,6 +224,7 @@ public class SwimmingGameController : MonoBehaviour
 			gameOverTitle.text = "VOCÊ VENCEU!!!";
 			sounds.PlaySound(sounds.applause);
 			addPoints(1000);
+			coinManager.AddCoins(coinPrimeiroLugar);
 
 		}
 		else
@@ -228,6 +233,7 @@ public class SwimmingGameController : MonoBehaviour
 			if (place == 2)
 			{
 				addPoints(700);
+				coinManager.AddCoins(coinGameOver);
 			}
 		}
 

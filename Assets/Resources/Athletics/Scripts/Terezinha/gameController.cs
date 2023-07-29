@@ -7,7 +7,8 @@ using System.Collections;
 public class gameController : MonoBehaviour {
 
 	public PlayfabManager playfabManager;
-
+	public CoinManager coinManager;
+	public int primeiro, segundo, terceiro;
 	public Text result;
 
 	public string breakRecord = "";
@@ -117,6 +118,7 @@ public class gameController : MonoBehaviour {
 			third = adversaryScript.adversary.name;
 			fourth = adversary3Script.adversary.name;
 				p=1;
+				coinManager.AddCoins(primeiro);
 			}
 		}
 		else if (playerBehaviour2.termina ==true && pF==false && pT==false){
@@ -129,6 +131,7 @@ public class gameController : MonoBehaviour {
 			fourth = adversary2Script.adversary.name;
 				p=2;
 			}
+			coinManager.AddCoins(segundo);
 		}
 
 		else if (pF=false && pS==false){
@@ -141,6 +144,7 @@ public class gameController : MonoBehaviour {
 			fourth = adversaryScript.adversary.name;
 				p=3;
 			}
+			coinManager.AddCoins(terceiro);
 		}
 		else if (playerBehaviour2.termina ==false && adversaryScript.termina == true && adversary2Script.termina == true && adversary3Script.termina == true)
 		{
@@ -151,6 +155,7 @@ public class gameController : MonoBehaviour {
 			third = adversaryScript.adversary.name;
 			fourth = "Terezinha Guilhermina e \nRafael Lazarini";
 			p=4;
+			
 		}	
 		else if (playerBehaviour2.termina ==false && adversaryScript.termina == false && adversary2Script.termina == false && adversary3Script.termina == false)
 		{

@@ -7,6 +7,8 @@ using UnityEngine.SceneManagement;
 
 public class veronica_Behaviour : MonoBehaviour
 {
+    public CoinManager coinManager;
+
 
     public PlayfabManager playfabManager;
     public bool isTutorial;
@@ -222,7 +224,8 @@ public class veronica_Behaviour : MonoBehaviour
                 }
                 betweenJumpsText.text = defaultText + scoreText;
                 betweenJumps = false;
-                Grant();
+                //Grant();
+                coinManager.AddCoins(25);
             }
             else
             {
