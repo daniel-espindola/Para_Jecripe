@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityStandardAssets.CrossPlatformInput;
 
 public class SwimmingTutorial_Player : MonoBehaviour
 {
@@ -56,7 +57,15 @@ public class SwimmingTutorial_Player : MonoBehaviour
 			{
 				ArmStroke("right", "rightArmStrokeTrigger");
 			}
-
+			//Mobile
+			if (CrossPlatformInputManager.GetButtonDown("LeftArrow"))
+			{
+				ArmStroke("left", "leftArmStrokeTrigger");
+			}
+			else if (CrossPlatformInputManager.GetButtonDown("RightArrow"))
+			{
+				ArmStroke("right", "rightArmStrokeTrigger");
+			}
 		}
 
 	}

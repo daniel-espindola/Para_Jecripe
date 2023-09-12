@@ -1,10 +1,11 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
+using UnityStandardAssets.CrossPlatformInput;
 
 public class SwimmingTutorial : MonoBehaviour
 {
-
+    public VibrationController vibrationController;
     public SwimmingTutorial_Player swimmingTutorial_Player;
     public Text balloonText1;
     GameObject balloon2;
@@ -53,7 +54,9 @@ public class SwimmingTutorial : MonoBehaviour
 
     void JumpIntoWater()
     {
-
+#if MOBILE_INPUT
+        vibrationController.VibrateDevice();		
+#endif
         GameObject.Find("Player").GetComponent<Animator>().SetBool("jumpp", true);
         GameObject.Find("PlayerParent").GetComponent<Animator>().SetTrigger("Jump");
         swimmingTutorial_Player.Jump();
@@ -64,21 +67,28 @@ public class SwimmingTutorial : MonoBehaviour
     {
 
 
-
         if (part1)
         {
 
             if (Time.timeSinceLevelLoad >= 1.8 && Time.timeSinceLevelLoad < 3.3)
             {
-
                 balloonText1.text = "Seja bem-vindo(a) ao jogo de natação!";
             }
             else if (Time.timeSinceLevelLoad >= 3.3)
             {
 
-                balloonText1.text = "Aperte ENTER para aprender a jogar!";
+                balloonText1.text = "Aperte ENTER ou Toque aqui para aprender a jogar!";
             }
             if (Input.GetKeyDown(KeyCode.Return))
+            {
+
+                Destroy(GameObject.Find("TextBalloon1"));
+                timer.SetTimer();
+                part1 = false;
+                part2 = true;
+                balloon2.SetActive(true);
+            }
+            if (CrossPlatformInputManager.GetButtonDown("Return"))
             {
 
                 Destroy(GameObject.Find("TextBalloon1"));
@@ -95,8 +105,22 @@ public class SwimmingTutorial : MonoBehaviour
 
             if (timer.time > 0.7f)
             {
-                balloon2.GetComponentInChildren<Text>().text = "Use ESPAÇO para o Clodoaldo Silva entrar na água";
+
+#if MOBILE_INPUT
+                balloon2.GetComponentInChildren<Text>().text = "Use o Botão virtual para o Clodoaldo Silva entrar na água";
+#else
+		balloon2.GetComponentInChildren<Text>().text = "Use ESPAÇO para o Clodoaldo Silva entrar na água";
+#endif
                 if (Input.GetKeyDown(KeyCode.Space))
+                {
+                    JumpIntoWater();
+                    sounds.WaitPlay(1f, sounds.dive);
+                    Destroy(balloon2);
+                    timer.SetTimer();
+                    part2 = false;
+                    part3 = true;
+                }
+                if (CrossPlatformInputManager.GetButtonDown("Space"))
                 {
                     JumpIntoWater();
                     sounds.WaitPlay(1f, sounds.dive);
@@ -120,7 +144,12 @@ public class SwimmingTutorial : MonoBehaviour
             }
             else if (timer.time >= 1.5f)
             {
-                balloon3.GetComponentInChildren<Text>().text = "Aperte a SETA DA DIREITA";
+#if MOBILE_INPUT
+                balloon3.GetComponentInChildren<Text>().text = "Aperte o BOTÃO DA DIREITA";
+#else
+		balloon3.GetComponentInChildren<Text>().text = "Aperte a SETA DA DIREITA";
+#endif
+
                 GetComponent<SwimmingTutorial_Player>().armStrokesOK = true;
                 if (Input.GetKey(KeyCode.RightArrow))
                 {
@@ -129,6 +158,13 @@ public class SwimmingTutorial : MonoBehaviour
                     part3 = false;
                     part4 = true;
 
+                }
+                if (CrossPlatformInputManager.GetButtonDown("RightArrow"))
+                {
+                    balloon3.GetComponentInChildren<Text>().text = "Isso! Use os BOTÕES para dar braçadas";
+                    timer.SetTimer();
+                    part3 = false;
+                    part4 = true;
                 }
             }
 
@@ -163,12 +199,25 @@ public class SwimmingTutorial : MonoBehaviour
             else if (timer.time >= 8)
             {
 
-
-                balloon4.GetComponentInChildren<Text>().text = "aperte ESPAÇO para respirar";
-
+#if MOBILE_INPUT
+                balloon4.GetComponentInChildren<Text>().text = "aperte AQUI para respirar";
+#else
+		balloon4.GetComponentInChildren<Text>().text = "aperte ESPAÇO para respirar";
+#endif
             }
 
             if (Input.GetKeyDown(KeyCode.Space))
+            {
+
+                sounds.PlaySound(SwimmingSounds.breathing);
+                GetComponent<SwimmingTutorial_Oxygen>().rechargeOxygen = true;
+                part4 = false;
+                Destroy(arrow1);
+                Destroy(balloon4);
+                timer.SetTimer();
+                part5 = true;
+            }
+            if (CrossPlatformInputManager.GetButtonDown("Space"))
             {
 
                 sounds.PlaySound(SwimmingSounds.breathing);
@@ -200,12 +249,19 @@ public class SwimmingTutorial : MonoBehaviour
             {
 
                 GetComponent<SwimmingTutorial_Player>().armStrokesOK = false;
+#if MOBILE_INPUT
+                balloon5.GetComponentInChildren<Text>().text = "Para começar o jogo, aperte AQUI";
+#else		
                 balloon5.GetComponentInChildren<Text>().text = "Para começar o jogo, aperte ENTER";
+#endif
                 if (Input.GetKeyDown(KeyCode.Return))
                 {
                     Application.LoadLevel("SwimmingMainV4");
                 }
-
+                if (CrossPlatformInputManager.GetButtonDown("Return"))
+                {
+                    Application.LoadLevel("SwimmingMainV4");
+                }
             }
         }
 

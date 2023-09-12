@@ -1,16 +1,12 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
-using PlayFab;
-using PlayFab.ClientModels;
-using System.Collections;
+
 
 public class gameControllerYohansson : MonoBehaviour {
 
 	public CoinManager coinManager;
-
+	public Text getCoinsText;
 	public Text result;
-
-	public PlayfabManager playfabManager;
 
 	public string breakRecord = "";
 
@@ -35,8 +31,8 @@ public class gameControllerYohansson : MonoBehaviour {
 	public GameObject waitCanvas;
 
 
-	void Start () {	
-
+	void Start () {
+		getCoinsText.text = coinManager.ToString();
 		adversaryScript = GameObject.Find ("athMale_adversary1").GetComponent<enemyBehaviour>();
 		adversary2Script = GameObject.Find ("athMale_adversary2").GetComponent<enemyBehaviour2>();
 		adversary3Script = GameObject.Find ("athMale_adversary3").GetComponent<enemyBehaviour3>();
@@ -99,39 +95,12 @@ public class gameControllerYohansson : MonoBehaviour {
 		place3.text = third;
 		place4.text = fourth;
 
-		result.text = "Parabéns, você ganhou "+ 50 +" moedas!";
-		//Grant();
-		coinManager.AddCoins(50);
+		result.text = "Parabéns, você ganhou "+ 100 +" moedas!";
+		coinManager.AddCoins(100);
 		end = true;
 
 	}
-	public void Grant()
-    {
-		var request = new AddUserVirtualCurrencyRequest
-		{
-			VirtualCurrency = "PJ",
-			Amount = 50
-		};
-		PlayFabClientAPI.AddUserVirtualCurrency(request, OnGrantVirtualCurrencySuccess, OnError);
-	}
-	public void GrantVirtualCurrency()
-	{
-		var request = new AddUserVirtualCurrencyRequest
-		{
-			VirtualCurrency = "OL",
-			Amount = 50
-		};
-		PlayFabClientAPI.AddUserVirtualCurrency(request, OnGrantVirtualCurrencySuccess, OnError);
-	}
-	void OnGrantVirtualCurrencySuccess(ModifyUserVirtualCurrencyResult result)
-	{
-		Debug.Log("Currency granted!");
-		playfabManager.GetVirtualCurrencies();
-	}
-	void OnError(PlayFabError error)
-	{
-		Debug.Log("Error: " + error.ErrorMessage);
-	}
+	
 	void sortedTimes(){
 
 		if (playerBehaviour2.termina ==true && adversaryScript.termina == false && adversary2Script.termina == false && adversary3Script.termina == false){

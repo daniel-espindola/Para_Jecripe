@@ -1,15 +1,26 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityStandardAssets.CrossPlatformInput;
 
 public class Swimming_StartGame : MonoBehaviour {
 
-	
+	[Header("Mobile UI")]
+	public bool useMobile;
+	public GameObject[] mobileControlls;
+
 	public GameObject text1;
 	SwimmingSounds sounds;
 	Timer t;
 
 	public bool b = false;
-	
+    private void Awake()
+    {
+#if MOBILE_INPUT
+		useMobile = true;
+#else
+		useMobile = false;
+#endif
+	}
 	void Start(){
 	
 		text1.SetActive(false);
@@ -17,6 +28,14 @@ public class Swimming_StartGame : MonoBehaviour {
 		sounds = GameObject.Find("SwimmingSounds").GetComponent<SwimmingSounds>();
 		t = GetComponent<Timer> ();
 		
+		if(useMobile == false)
+        {
+			DisableGameObjects(mobileControlls);
+		}
+		if (useMobile == true)
+		{
+			EnableGameObjects(mobileControlls);
+		}
 	}
 	
 	void Update () {
@@ -36,7 +55,22 @@ public class Swimming_StartGame : MonoBehaviour {
 
 			t.SetTimer ();
 
-		} else if (t.time >= 1.12f) {
+		}
+		else if (Time.timeSinceLevelLoad >= 2 && CrossPlatformInputManager.GetButtonDown("Space"))
+		{
+
+			b = true;
+			GameObject.Find("SwimmingController").GetComponent<SwimmingGameController>().StartGame();
+			text1.SetActive(false);
+			GameObject.Find("Intro").SetActive(false);
+			sounds.PlaySound(sounds.background);
+			sounds.PlaySound(sounds.backgroundPeople);
+
+			t.SetTimer();
+
+		}
+
+		else if (t.time >= 1.12f) {
 
 			t.ResetTimer ();
 			this.gameObject.SetActive (false);
@@ -44,5 +78,26 @@ public class Swimming_StartGame : MonoBehaviour {
 
 		}
 	
+	}
+
+	void DisableGameObjects(GameObject[] gameObjects)
+	{
+		for (int i = 0; i < gameObjects.Length; i++)
+		{
+			if (gameObjects[i] != null)
+			{
+				gameObjects[i].SetActive(false);
+			}
+		}
+	}
+	void EnableGameObjects(GameObject[] gameObjects)
+	{
+		for (int i = 0; i < gameObjects.Length; i++)
+		{
+			if (gameObjects[i] != null)
+			{
+				gameObjects[i].SetActive(true);
+			}
+		}
 	}
 }

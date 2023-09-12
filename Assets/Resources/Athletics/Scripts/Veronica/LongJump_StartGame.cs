@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
+using UnityStandardAssets.CrossPlatformInput;
 
 public class LongJump_StartGame : MonoBehaviour {
 
@@ -34,7 +35,18 @@ public class LongJump_StartGame : MonoBehaviour {
 			t.SetTimer ();
 
 
-		} else if (c == 1) {
+		}
+		if (c == 0 && CrossPlatformInputManager.GetButtonDown("Space"))
+		{
+
+			startCanvas.SetActive(false);
+			countdown.SetActive(true);
+			c++;
+			t.SetTimer();
+
+
+		}
+		else if (c == 1) {
 
 			if (t.time <= 2.5f) { 
 				countdownTime = 3.4f - t.time;

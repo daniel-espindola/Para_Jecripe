@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
+using UnityStandardAssets.CrossPlatformInput;
 
 public class InitialCountDownYohansson : MonoBehaviour {
 
@@ -45,7 +46,17 @@ public class InitialCountDownYohansson : MonoBehaviour {
 			t.SetTimer ();
 			c++;
 
-		} else if (c == 1) {
+		}
+		if (CrossPlatformInputManager.GetButtonDown("Space") && c == 0)
+		{
+
+			countdownCanvas.SetActive(true);
+			startCanvas.SetActive(false);
+			t.SetTimer();
+			c++;
+
+		}
+		else if (c == 1) {
 
 			if (t.time <= 2.5f) { 
 				countdownTime = 3.4f - t.time;
@@ -68,6 +79,16 @@ public class InitialCountDownYohansson : MonoBehaviour {
 
 			if (Input.GetKeyDown (KeyCode.UpArrow)) {
 				p.startRunning ();
+				c++;
+			}
+			if (CrossPlatformInputManager.GetButtonDown("SetaEsquerda"))
+			{
+				p.startRunning();
+				c++;
+			}
+			if (CrossPlatformInputManager.GetButtonDown("SetaDireita"))
+			{
+				p.startRunning();
 				c++;
 			}
 

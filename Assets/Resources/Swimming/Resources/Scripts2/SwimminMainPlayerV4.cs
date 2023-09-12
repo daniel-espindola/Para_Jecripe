@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityStandardAssets.CrossPlatformInput;
 
 public class SwimminMainPlayerV4 : MonoBehaviour
 {
@@ -22,14 +23,18 @@ public class SwimminMainPlayerV4 : MonoBehaviour
 
 	SwimmingSounds sounds;
 
-	private void Awake()
+	//[Header("Mobile UI")]
+	//public bool useMobile;
+    //public GameObject[] mobileControlls;
+    //public GameObject mobileUi;
+
+    private void Awake()
 	{
 		instance = this;
 	}
 
 	void Start()
 	{
-
 		player = GameObject.Find("Player");
 		maxvel = new Vector3(0.0f, 0.0f, 3);
 		movement = new Vector3(0, 0, 11f);
@@ -61,6 +66,12 @@ public class SwimminMainPlayerV4 : MonoBehaviour
 				armStrokesOK = true;
 				player.transform.rotation = Quaternion.Euler(rotationVector);
 			}
+			//Mobile
+			if (CrossPlatformInputManager.GetButtonDown("Space"))
+			{
+				armStrokesOK = true;
+				player.transform.rotation = Quaternion.Euler(rotationVector);
+			}
 		}
 		if (!paused)
 		{
@@ -74,7 +85,15 @@ public class SwimminMainPlayerV4 : MonoBehaviour
 				{
 					ArmStroke("right", "rightArmStrokeTrigger");
 				}
-
+				//Mobile
+				else if (CrossPlatformInputManager.GetButtonDown("LeftArrow"))
+				{
+					ArmStroke("left", "leftArmStrokeTrigger");
+				}
+				else if (CrossPlatformInputManager.GetButtonDown("RightArrow"))
+				{
+					ArmStroke("right", "rightArmStrokeTrigger");
+				}
 			}
 		}
 		if (normalTutorial == true)
@@ -86,6 +105,15 @@ public class SwimminMainPlayerV4 : MonoBehaviour
 					ArmStroke("left", "leftArmStrokeTrigger");
 				}
 				if (Input.GetKeyDown(KeyCode.RightArrow))
+				{
+					ArmStroke("right", "rightArmStrokeTrigger");
+				}
+				//Mobile
+				if (CrossPlatformInputManager.GetButtonDown("LeftArrow"))
+				{
+					ArmStroke("left", "leftArmStrokeTrigger");
+				}
+				if (CrossPlatformInputManager.GetButtonDown("RightArrow"))
 				{
 					ArmStroke("right", "rightArmStrokeTrigger");
 				}
@@ -124,5 +152,25 @@ public class SwimminMainPlayerV4 : MonoBehaviour
 	{
 		player.GetComponent<Rigidbody>().AddForce(movement * 13);
 		//Debug.Log(player.GetComponent<Rigidbody>().velocity);
+	}
+	void DisableGameObjects(GameObject[] gameObjects)
+	{
+		for (int i = 0; i < gameObjects.Length; i++)
+		{
+			if (gameObjects[i] != null)
+			{
+				gameObjects[i].SetActive(false);
+			}
+		}
+	}
+	void EnableGameObjects(GameObject[] gameObjects)
+	{
+		for (int i = 0; i < gameObjects.Length; i++)
+		{
+			if (gameObjects[i] != null)
+			{
+				gameObjects[i].SetActive(true);
+			}
+		}
 	}
 }

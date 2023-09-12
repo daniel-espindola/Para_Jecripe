@@ -20,6 +20,8 @@ public class PositionPlayerInGame : MonoBehaviour
     public int primeiro;
     public int segundo;
     public int terceiro;
+    public Text grantText;
+    public Text getText;
     string vitoria = "Você Ganhou!";
     string derrota = "Você Perdeu!";
     bool finaldojogo;
@@ -32,6 +34,8 @@ public class PositionPlayerInGame : MonoBehaviour
     private string place2Name;
     private string place3Name;
 
+    bool podePremiar;
+
     void Start()
     {
         place1Name = "Clodoaldo Silva";
@@ -41,23 +45,21 @@ public class PositionPlayerInGame : MonoBehaviour
 
     void Update()
     {
+        getText.text = "Você tem "+coinManager.GetCoins().ToString() + " moedas";
         if (player.position.z > opponent.position.z && player.position.z > opponent2.position.z)
         {
             currentposition = 1;
-            currentpositionText.text = currentposition.ToString();
-            coinManager.AddCoins(primeiro);
+            currentpositionText.text = currentposition.ToString();     
         }
         else if (player.position.z < opponent.position.z && player.position.z > opponent2.position.z && opponent2.position.z < opponent.position.z || player.position.z > opponent.position.z && player.position.z < opponent2.position.z && opponent2.position.z > opponent.position.z)
         {
             currentposition = 2;
             currentpositionText.text = currentposition.ToString();
-            coinManager.AddCoins(segundo);
         }
         else if (player.position.z < opponent.position.z && player.position.z < opponent2.position.z)
         {
             currentposition = 3;
             currentpositionText.text = currentposition.ToString();
-            coinManager.AddCoins(terceiro);
         }
 
         if (currentposition != finalPosition)
@@ -72,7 +74,7 @@ public class PositionPlayerInGame : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.CompareTag("Player") && finalPosition >= 1)
+        if (other.gameObject.CompareTag("Player") && finalPosition > 1)
         {
             titulo.text = derrota;
             //DERROTA
@@ -92,7 +94,7 @@ public class PositionPlayerInGame : MonoBehaviour
             finalPosition++;
             Debug.Log("Opponent foi");
         }
-
+        GrantCoins();
         UpdatePlaceNames();
     }
 
@@ -107,19 +109,38 @@ public class PositionPlayerInGame : MonoBehaviour
         {
             place1Text.text = place1Name;
             place2Text.text = place2Name;
-            place3Text.text = place3Name;
+            place3Text.text = place3Name;           
         }
         else if (finalPosition == 2)
         {
             place1Text.text = place2Name;
             place2Text.text = place1Name;
-            place3Text.text = place3Name;
+            place3Text.text = place3Name; 
         }
         else if (finalPosition == 3)
         {
             place1Text.text = place3Name;
             place2Text.text = place2Name;
-            place3Text.text = place1Name;
+            place3Text.text = place1Name;    
+        }
+    }
+
+    void GrantCoins()
+    {
+        if (finalPosition == 1)
+        {
+            coinManager.AddCoins(primeiro);
+            grantText.text = "Você ganhou um total de" + primeiro.ToString() + " moedas";
+        }
+        else if (finalPosition == 2)
+        {
+            coinManager.AddCoins(segundo);
+            grantText.text = "Você ganhou um total de " + segundo.ToString() + " moedas";
+        }
+        else if (finalPosition == 3)
+        {
+            coinManager.AddCoins(terceiro);
+            grantText.text = "Você ganhou um total de " + terceiro.ToString() + " moedas";
         }
     }
 }

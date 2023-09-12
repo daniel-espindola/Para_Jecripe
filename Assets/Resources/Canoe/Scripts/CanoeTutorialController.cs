@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
+using UnityStandardAssets.CrossPlatformInput;
 
 public class CanoeTutorialController : MonoBehaviour {
 
@@ -28,7 +29,14 @@ public class CanoeTutorialController : MonoBehaviour {
             b2.SetActive(true);
             timer = Time.time;
         }
-        if(Time.time > timer + 3f){
+        if (CrossPlatformInputManager.GetButtonDown("Space") && !started)
+        {
+            started = true;
+            b1.SetActive(false);
+            b2.SetActive(true);
+            timer = Time.time;
+        }
+        if (Time.time > timer + 3f){
             b2.SetActive(false);
             b3.SetActive(true);
         }
@@ -38,7 +46,7 @@ public class CanoeTutorialController : MonoBehaviour {
             b2Text.text = "As bóias vermelhas indicam o a reta final. Falta pouco!";
             b2.SetActive(true);
         }
-        if (Input.GetKeyDown(KeyCode.Space) && finished)
+        if (CrossPlatformInputManager.GetButtonDown("Space") && finished)
         {
             Application.LoadLevel("CanoeGame");
         }
@@ -49,7 +57,11 @@ public class CanoeTutorialController : MonoBehaviour {
         finished = true;
         timer = Mathf.Infinity;
         b2.SetActive(false);
-        b1Text.text = "Parabéns, você completou o tutorial!. Pressione ESPAÇO para jogar uma partida.";
+#if MOBILE_INPUT
+        b1Text.text = "Parabéns, você completou o tutorial!. Pressione AQUI para jogar uma partida.";
+#else
+		b1Text.text = "Parabéns, você completou o tutorial!. Pressione ESPAÇO para jogar uma partida.";
+#endif
         b1.SetActive(true);
     }
 

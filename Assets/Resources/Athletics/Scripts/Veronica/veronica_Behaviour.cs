@@ -4,13 +4,16 @@ using PlayFab;
 using PlayFab.ClientModels;
 using System.Collections;
 using UnityEngine.SceneManagement;
+using UnityStandardAssets.CrossPlatformInput;
 
 public class veronica_Behaviour : MonoBehaviour
 {
+    public VibrationController vibrationController;
     public CoinManager coinManager;
+    public int premioOuro, premioPrata, premioBronze;
+    public Text getCoins;
 
-
-    public PlayfabManager playfabManager;
+  
     public bool isTutorial;
     private bool start;
     private bool canRun;
@@ -20,7 +23,7 @@ public class veronica_Behaviour : MonoBehaviour
     private bool pressLeft;
     private bool jumpFailed;
     private Animator animator;
-    private Rigidbody rb;
+    public Rigidbody rb;
     public float acceleration, maxSpeed;
     private float timer;
     public GameObject rightFoot, leftFoot;
@@ -45,10 +48,11 @@ public class veronica_Behaviour : MonoBehaviour
     public GameObject sandParticles;
 
     bool vai;
-
+    public bool useMobile;
     // Use this for initialization
     void Start()
     {
+        getCoins.text = coinManager.GetCoins().ToString();
         rb = GetComponent<Rigidbody>();
         rb.useGravity = false;
         animator = GetComponent<Animator>();
@@ -70,6 +74,12 @@ public class veronica_Behaviour : MonoBehaviour
             defaultText = "Parabéns, seu salto foi válido!\n Voce ganhou 50 moedas!\n\n";
         }
         Time.timeScale = 1;
+
+#if MOBILE_INPUT
+        useMobile = true;
+#else
+		 useMobile = false;
+#endif
     }
     void Update()
     {
@@ -112,37 +122,148 @@ public class veronica_Behaviour : MonoBehaviour
     }
     private void Run()
     {
-        if (Input.GetKeyDown(KeyCode.LeftArrow) && pressLeft == true)
-        {
-            leftFoot.SetActive(false);
-            rightFoot.SetActive(true);
-            pressLeft = false;
-            if (-rb.velocity.x <= maxSpeed)
+        if(useMobile == false) {
+            if (Input.GetKeyDown(KeyCode.LeftArrow) && pressLeft == true)
             {
-                rb.velocity += acceleration * -transform.forward;
+                leftFoot.SetActive(false);
+                rightFoot.SetActive(true);
+                pressLeft = false;
+                if (-rb.velocity.x <= maxSpeed)
+                {
+                    rb.velocity += acceleration * -transform.forward;
+                }
             }
-        }
-        else if (Input.GetKeyDown(KeyCode.RightArrow) && pressLeft == false)
-        {
-            rightFoot.SetActive(false);
-            leftFoot.SetActive(true);
-            pressLeft = true;
-            if (-rb.velocity.x <= maxSpeed)
+            if (CrossPlatformInputManager.GetButtonDown("LeftArrow") && pressLeft == true)
             {
-                rb.velocity += acceleration * -transform.forward;
+                leftFoot.SetActive(false);
+                rightFoot.SetActive(true);
+                pressLeft = false;
+                if (-rb.velocity.x <= maxSpeed)
+                {
+                    rb.velocity += acceleration * -transform.forward;
+                }
+                //Debug.Log("LeftArrow");
             }
+            else if (Input.GetKeyDown(KeyCode.RightArrow) && pressLeft == false)
+            {
+                rightFoot.SetActive(false);
+                leftFoot.SetActive(true);
+                pressLeft = true;
+                if (-rb.velocity.x <= maxSpeed)
+                {
+                    rb.velocity += acceleration * -transform.forward;
+                }
+            }
+            else if (CrossPlatformInputManager.GetButtonDown("RightArrow") && pressLeft == false)
+            {
+                rightFoot.SetActive(false);
+                leftFoot.SetActive(true);
+                pressLeft = true;
+                if (-rb.velocity.x <= maxSpeed)
+                {
+                    rb.velocity += acceleration * -transform.forward;
+                }
+                Debug.Log("RightArrow");
+            }
+            else if (-rb.velocity.x > 0 && ((Input.GetKeyDown(KeyCode.LeftArrow) && pressLeft == false) || (Input.GetKeyDown(KeyCode.RightArrow) && pressLeft == true)))
+            {
+                rb.velocity -= (acceleration / 3) * -transform.forward;
+            }
+            //else if (-rb.velocity.x > 0 && ((CrossPlatformInputManager.GetButton("LeftArrow") && pressLeft == false) || (CrossPlatformInputManager.GetButton("RightArrow") && pressLeft == true)))
+            //{
+            //    rb.velocity -= (acceleration / 3) * -transform.forward;
+            //}
+            animator.SetFloat("speed", -rb.velocity.x);
         }
-        else if (-rb.velocity.x > 0 && ((Input.GetKeyDown(KeyCode.LeftArrow) && pressLeft == false) || (Input.GetKeyDown(KeyCode.RightArrow) && pressLeft == true)))
+        if (useMobile == true)
         {
-            rb.velocity -= (acceleration / 3) * -transform.forward;
+
+            if (Input.touchCount > 0)
+            {
+                Touch touch = Input.GetTouch(0); // Obtém o primeiro toque registrado
+
+                // Verifica se o toque está na metade esquerda ou direita da tela
+                if (touch.position.x < Screen.width / 2 && pressLeft == true)
+                {
+                    // Atualiza a animação dos pés e o estado de movimento
+                    leftFoot.SetActive(false);
+                    rightFoot.SetActive(true);
+                    pressLeft = false;
+
+                    // Move o personagem para a esquerda
+                    if (-rb.velocity.x <= maxSpeed)
+                    {
+                        rb.velocity += acceleration * -transform.forward;
+                    }
+                }
+                else if (touch.position.x >= Screen.width / 2 && pressLeft == false)
+                {
+                    // Atualiza a animação dos pés e o estado de movimento
+                    rightFoot.SetActive(false);
+                    leftFoot.SetActive(true);
+                    pressLeft = true;
+
+                    // Move o personagem para a direita
+                    if (-rb.velocity.x <= maxSpeed)
+                    {
+                        rb.velocity += acceleration * -transform.forward;
+                    }
+                }
+            }
+            // Modificado com Touch
+            else if (-rb.velocity.x > 0)
+            {
+                if (Input.touchCount > 0)
+                {
+                    Touch touch = Input.GetTouch(0);
+
+                    // Verifica se o toque está na metade esquerda ou direita da tela
+                    if (touch.position.x < Screen.width / 2 && pressLeft == false)
+                    {
+                        // Desacelera o personagem ao trocar de direção durante o movimento
+                        rb.velocity -= (acceleration / 3) * -transform.forward;
+                    }
+                    else if (touch.position.x >= Screen.width / 2 && pressLeft == true)
+                    {
+                        // Desacelera o personagem ao trocar de direção durante o movimento
+                        rb.velocity -= (acceleration / 3) * -transform.forward;
+                    }
+                }
+            }
+
+
+            // Atualiza a animação de velocidade do personagem
+            animator.SetFloat("speed", -rb.velocity.x);
+
         }
-        animator.SetFloat("speed", -rb.velocity.x);
     }
 
     private void Jump()
     {
         if (Input.GetKeyDown(KeyCode.Space))
         {
+            rb.useGravity = true;
+            jumpMessage.SetActive(false);
+            rightFoot.SetActive(false);
+            leftFoot.SetActive(false);
+            if (SceneManager.GetActiveScene().name.Contains("utorial"))
+            {
+                rb.AddForce(Vector3.up * 70f);
+            }
+            else
+            {
+                rb.AddForce(Vector3.up * 250f);
+            }
+            animator.SetBool("jump", true);
+            isJumping = true;
+            canRun = false;
+            canJump = false;
+            jumpFailed = false;
+            timer = Time.time;
+        }
+        if (CrossPlatformInputManager.GetButtonDown("Space"))
+        {
+            vibrationController.VibrateDevice();
             rb.useGravity = true;
             jumpMessage.SetActive(false);
             rightFoot.SetActive(false);
@@ -224,8 +345,7 @@ public class veronica_Behaviour : MonoBehaviour
                 }
                 betweenJumpsText.text = defaultText + scoreText;
                 betweenJumps = false;
-                //Grant();
-                coinManager.AddCoins(25);
+                
             }
             else
             {
@@ -239,30 +359,9 @@ public class veronica_Behaviour : MonoBehaviour
     {
         points += n;
         pointsText.text = "" + points;
-        //Grant
-        Grant();
-        Debug.Log("Grant");
+        
     }
-    public void Grant()
-    {
-        var request = new AddUserVirtualCurrencyRequest
-        {
-            VirtualCurrency = "PJ",
-            Amount = 50
-        };
-        PlayFabClientAPI.AddUserVirtualCurrency(request, OnGrantVirtualCurrencySuccess, OnError);
-    }
-    void OnGrantVirtualCurrencySuccess(ModifyUserVirtualCurrencyResult result)
-    {
-
-        Debug.Log("Currency granted!");
-        playfabManager.GetVirtualCurrencies();
-    }
-    void OnError(PlayFabError error)
-    {
-        // Debug.Log("Error: " + error.ErrorMessage);
-    }
-
+    
     public void Restart()
     {
         Application.LoadLevel(Application.loadedLevel);
@@ -324,18 +423,22 @@ public class veronica_Behaviour : MonoBehaviour
         string message = " ", score = " ";
         if (scoreBoardNames[0] == "Verônica Hipólito")
         {
-            message = "Parabéns, você ganhou medalha de ouro!\nVoce ganhou 1500 moedas!\n\n";
-            AddPoints(1500);
+            message = "Parabéns, você ganhou medalha de ouro!\nVoce ganhou 100 moedas!\n\n";
+            //AddPoints(1500);
+            coinManager.AddCoins(100);
+
         }
         else if (scoreBoardNames[1] == "Verônica Hipólito")
         {
-            message = "Parabéns, você ganhou medalha de prata!\nVoce ganhou 1000 moedas!\n\n";
-            AddPoints(1000);
+            message = "Parabéns, você ganhou medalha de prata!\nVoce ganhou 50 moedas!\n\n";
+            //AddPoints(1000);
+            coinManager.AddCoins(50);
         }
         else if (scoreBoardNames[2] == "Verônica Hipólito")
         {
-            message = "Parabéns, você ganhou medalha de bronze!\nVoce ganhou 600 moedas!\n\n";
-            AddPoints(600);
+            message = "Parabéns, você ganhou medalha de bronze!\nVoce ganhou 25 moedas!\n\n";
+            //AddPoints(600);
+            coinManager.AddCoins(25);
         }
         else
         {

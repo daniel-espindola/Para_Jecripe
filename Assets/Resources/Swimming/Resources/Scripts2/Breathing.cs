@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
+using UnityStandardAssets.CrossPlatformInput;
 
 public class Breathing : MonoBehaviour
 {
@@ -17,7 +18,6 @@ public class Breathing : MonoBehaviour
 		
 		sounds = GameObject.Find ("SwimmingSounds").GetComponent<SwimmingSounds> ();
 		SC = GameObject.Find ("SwimmingController").GetComponent<SwimmingGameController>();
-		breatheWarning = GameObject.Find ("RememberToBreathe");
 		breatheWarning.SetActive (false);
 
 	}
@@ -27,6 +27,11 @@ public class Breathing : MonoBehaviour
 		if (SC.inWater) {
 			if (Input.GetKeyDown (KeyCode.Space)) {
 				CheckOLevel ();
+			}
+			//Mobile
+			if (CrossPlatformInputManager.GetButtonDown("Space"))
+			{
+				CheckOLevel();
 			}
 			if (rechargeOxygen) {
 				Recharge0xygen ();
@@ -40,7 +45,7 @@ public class Breathing : MonoBehaviour
 	
 	void DecreaseOxygen ()
 	{
-		healthBarSlider.value -= Time.deltaTime * 0.08f;
+		healthBarSlider.value -= Time.deltaTime * 0.05f;
 		if (healthBarSlider.value < 0.15f)
 			breatheWarning.SetActive (true);
 

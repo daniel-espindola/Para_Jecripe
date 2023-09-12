@@ -1,14 +1,16 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
+using UnityStandardAssets.CrossPlatformInput;
 
 public class LongJump_Tutorial : MonoBehaviour
 {
-
-	GameObject b1, b2, b3, b4, b5, b6;
-	GameObject pauseCanvas;
+	public VibrationController vibrationController;
+	private bool pressLeft;
+	public GameObject b1, b2, b3, b4, b5, b6;
+	public GameObject pauseCanvas;
 	public GameObject settingsCanvas;
-	GameObject canvas1;
+	public GameObject canvas1;
 	Timer t;
 	public int count = 0;
 	string bText; //Text written in the Balloon in the Editor
@@ -66,13 +68,24 @@ public class LongJump_Tutorial : MonoBehaviour
 				b1.GetComponentInChildren<Text> ().text = "Seja bem-vindo(a) ao jogo de salto em distância com a Verônica Hipólito!";			
 			}
             else if (Time.timeSinceLevelLoad >= 3.3f)
-            { 
-				b1.GetComponentInChildren<Text> ().text = "Aperte ENTER para aprender a jogar";
+            {
+
+#if MOBILE_INPUT
+				b1.GetComponentInChildren<Text>().text = "Aperte AQUI para aprender a jogar";
+#else
+		b1.GetComponentInChildren<Text> ().text = "Aperte ENTER para aprender a jogar";
+#endif
 				if (Input.GetKeyDown (KeyCode.Return))
                 {					 
 					count++;
 					t.SetTimer ();
 					b1.SetActive (false);
+				}
+				if (CrossPlatformInputManager.GetButtonDown("Return"))
+				{
+					count++;
+					t.SetTimer();
+					b1.SetActive(false);
 				}
 			}
 			
@@ -94,21 +107,38 @@ public class LongJump_Tutorial : MonoBehaviour
 				}
                 else if (t.time >= 3.5f & t.time < 4)
                 {
-				
-					b2.GetComponentInChildren<Text> ().text = "Você precisa apertar a seta daquele mesmo lado para correr.";
-				
+
+#if MOBILE_INPUT
+					b2.GetComponentInChildren<Text>().text = "Você precisa apertar o botão daquele mesmo lado para correr.";
+#else
+		b2.GetComponentInChildren<Text> ().text = "Você precisa apertar a seta daquele mesmo lado para correr.";
+#endif
+
 				}
-                else if (t.time > 4f)
+				else if (t.time > 4f)
                 {					
 					b3.SetActive (true);				
 				    if (Input.GetKeyDown (KeyCode.LeftArrow)) {
 					    b2.SetActive (false);
-                        b3.GetComponentInChildren<Text>().text = "Pressone as setas alternadamente com rapidez para ganhar velociade";
+                        b3.GetComponentInChildren<Text>().text = "Pressione as setas alternadamente com rapidez para ganhar velociade";
                         leftFoot.SetActive(false);
                         rightFoot.SetActive(true);
 					    t.SetTimer ();
 					    count++;				
-				    }				
+				    }
+					if (Input.touchCount > 0)
+                    {
+						Touch touch = Input.GetTouch(0); // Obtém o primeiro toque registrado
+						if (touch.position.x < Screen.width / 2)
+						{
+							b2.SetActive(false);
+							b3.GetComponentInChildren<Text>().text = "Pressone o lado esquerdo e direito alternadamente para ganhar velociade";
+							leftFoot.SetActive(false);
+							rightFoot.SetActive(true);
+							t.SetTimer();
+							count++;
+						}
+					}
 				}
 			
 			
@@ -156,6 +186,14 @@ public class LongJump_Tutorial : MonoBehaviour
                 t.SetTimer();
                 count++;
             }
+
+			if (CrossPlatformInputManager.GetButtonDown("Space"))
+			{
+				vibrationController.VibrateDevice();
+				Time.timeScale = 1;
+				t.SetTimer();
+				count++;
+			}
 		}
         else if (count == 6)
         {
@@ -168,10 +206,18 @@ public class LongJump_Tutorial : MonoBehaviour
 			}
             else if (t.time >= 3)
             {
-				
-				b6.GetComponentInChildren<Text>().text = "Aperte ENTER para ajudar a Verônica Hipólito a completar a prova!";
-				if(Input.GetKeyDown(KeyCode.Return))
+#if MOBILE_INPUT
+				b6.GetComponentInChildren<Text>().text = "Aperte AQUI para ajudar a Verônica Hipólito a completar a prova!";
+#else
+		b6.GetComponentInChildren<Text>().text = "Aperte ENTER para ajudar a Verônica Hipólito a completar a prova!";
+#endif
+
+				if (Input.GetKeyDown(KeyCode.Return))
                 {
+					Application.LoadLevel("LongJumpGame");
+				}
+				if (CrossPlatformInputManager.GetButtonDown("Return"))
+				{
 					Application.LoadLevel("LongJumpGame");
 				}
 			}

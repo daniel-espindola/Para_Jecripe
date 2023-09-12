@@ -11,11 +11,23 @@ public class MainItem : MonoBehaviour
     public string idItem;
     [Header("Item")]
     public GameObject item;
+    //public GameObject itemPadrao;
     public GameObject[] otherGameObjects;
 
     private void Awake()
     {
         instance = this;
+        if (PlayerPrefs.HasKey(idItem))
+        {
+            // Obtém o valor armazenado na chave "canActivate"
+            canActivate = PlayerPrefs.GetInt(idItem) == 1;
+        }
+        // Ativa ou desativa o GameObject com base no valor de canActivate
+        item.SetActive(canActivate);
+        if (canActivate == true)
+        {
+            DisableGameObjects(otherGameObjects);
+        }
     }
     private void Start()
     {
@@ -37,6 +49,7 @@ public class MainItem : MonoBehaviour
         {
             DisableGameObjects(otherGameObjects);
         }
+        
     }
 
     public void SetCanActivate(bool value)
@@ -48,7 +61,7 @@ public class MainItem : MonoBehaviour
         PlayerPrefs.SetInt(idItem, canActivate ? 1 : 0);
 
         // Ativa ou desativa o GameObject com base no valor de canActivate
-        gameObject.SetActive(canActivate);
+        gameObject.SetActive(canActivate);       
     }
 
     public void CreateHasKey()

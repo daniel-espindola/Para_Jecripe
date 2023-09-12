@@ -10,6 +10,7 @@ public class playerBehaviour2 : MonoBehaviour
 	static public bool começa, termina, start;
 	static public float playertime;
 
+	public bool useMobile;
 	public float velocidade, tempocomeça, x, x1, y, velocidadeanimacao, vellado, velfrente, tempoabaixa, n, m, tempotermina;
 	public bool pronto, esquerda, transformavelocidade, abaixa, fim, p;
 	public Rigidbody rig;
@@ -49,14 +50,14 @@ public class playerBehaviour2 : MonoBehaviour
 
 	private StoreDataContainer sD;
 
-	private int i=0;
+	private int i = 0;
 
-	void Start ()
+	void Start()
 	{
-        Time.timeScale = 1;
-        hit = 0;
+		Time.timeScale = 1;
+		hit = 0;
 		bonusnumber = 0;
-		playertime = 0;		
+		playertime = 0;
 		velocidade = 1;
 		pronto = false;
 		começa = false;
@@ -65,302 +66,388 @@ public class playerBehaviour2 : MonoBehaviour
 		transformavelocidade = false;
 		x = referencia.position.x;
 		x1 = referencia2.position.x;
-		startButton = GameObject.Find ("Start");
+		startButton = GameObject.Find("Start");
 		start = false;
 		n = 0.4f;
-		m = 0.003f;		
-		rig = GetComponent<Rigidbody> ();
-		animator = GetComponent<Animator> ();
+		m = 0.003f;
+		rig = GetComponent<Rigidbody>();
+		animator = GetComponent<Animator>();
 		p = true;
-		
-		t = GetComponent<Timer> ();
-		
-		fallingCoin = GameObject.Find ("FallingCoin").GetComponent<FallingCoin> ();
-		
 
-	
+		t = GetComponent<Timer>();
 
-		Sounds = GameObject.Find ("Sounds").GetComponent<AthleticsSounds> ();
+		fallingCoin = GameObject.Find("FallingCoin").GetComponent<FallingCoin>();
+
+
+
+
+		Sounds = GameObject.Find("Sounds").GetComponent<AthleticsSounds>();
 
 
 
 	}
 
-	void MovimentaCurva ()
+	void MovimentaCurva()
 	{
 		rig.velocity = velfrente * -transform.forward + vellado * transform.right;
 
 		tempoabaixa += Time.deltaTime;
-		if (vellado < 0.001) {
+		if (vellado < 0.001)
+		{
 			rig.velocity = Vector3.zero;
 			hit = 0;
 		}
 
 
-		if (velfrente >= 7) {
+		if (velfrente >= 7)
+		{
 			n = 0.2f;
-			m = 0.002f;	
-		} else {
-			if (velfrente >= 5) {
+			m = 0.002f;
+		}
+		else
+		{
+			if (velfrente >= 5)
+			{
 				n = 0.3f;
-				m = 0.0035f;	
-			} else { 
+				m = 0.0035f;
+			}
+			else
+			{
 				n = 0.5f;
-				m = 0.004f;	
+				m = 0.004f;
 			}
 		}
-		
-		if (tempoabaixa > 0.3f && vellado > 0 && velfrente > 0) {
+
+		if (tempoabaixa > 0.3f && vellado > 0 && velfrente > 0)
+		{
 			velfrente -= 0.6f;
 			vellado -= 0.006f;
 			tempoabaixa = 0;
 		}
-		
-		
-		if (esquerda) {
-			if (Input.GetKeyDown (KeyCode.LeftArrow)) {
+
+
+		if (esquerda)
+		{
+			if (SimpleInput.GetKeyDown(KeyCode.LeftArrow))
+			{
 				velfrente += n;
 				vellado += m;
 				hit += 1;
-				rightFoot.SetActive (true);
-				leftFoot.SetActive (false);
+				rightFoot.SetActive(true);
+				leftFoot.SetActive(false);
 				esquerda = false;
-				
+
 			}
-			if (Input.GetKeyDown (KeyCode.RightArrow) && velfrente > 0) {
+			if (SimpleInput.GetKeyDown(KeyCode.RightArrow) && velfrente > 0)
+			{
 				velfrente -= n;
 				vellado -= m;
 				hit = 0;
 
-			}		
-		} else {
-			if (Input.GetKeyDown (KeyCode.RightArrow)) {
+			}
+		}
+		else
+		{
+			if (SimpleInput.GetKeyDown(KeyCode.RightArrow))
+			{
 				velfrente += n;
 				vellado += m;
-				rightFoot.SetActive (false);
-				leftFoot.SetActive (true);
+				rightFoot.SetActive(false);
+				leftFoot.SetActive(true);
 				hit += 1;
-				esquerda = true;					
-			}	
-			if (Input.GetKeyDown (KeyCode.LeftArrow) && velfrente > 0) {
+				esquerda = true;
+			}
+			if (SimpleInput.GetKeyDown(KeyCode.LeftArrow) && velfrente > 0)
+			{
 				velfrente -= n;
 				vellado -= m;
 				hit = 0;
 			}
+			//Mobile
+			if(useMobile == true)
+            {
+				//if (SimpleInput.GetKeyDown(KeyCode.RightArrow))
+				//{
+				//	velfrente += n;
+				//	vellado += m;
+				//	rightFoot.SetActive(false);
+				//	leftFoot.SetActive(true);
+				//	hit += 1;
+				//	esquerda = true;
+				//}
+				//if (Input.GetKeyDown(KeyCode.LeftArrow) && velfrente > 0)
+				//{
+				//	velfrente -= n;
+				//	vellado -= m;
+				//	hit = 0;
+				//}
+			}
+			
 		}
 	}
 
-	void Movimenta ()
+	void Movimenta()
 	{
 
 
 
 
-		if (rig.velocity != new Vector3 (0, 0, 0)) {
+		if (rig.velocity != new Vector3(0, 0, 0))
+		{
 
-			if (rig.velocity.x < 1.2f && rig.velocity.x > -1.2f) {
+			if (rig.velocity.x < 1.2f && rig.velocity.x > -1.2f)
+			{
 				rig.velocity = Vector3.zero;
 				hit = 0;
 			}
 		}
-		
-		if (esquerda) {
-			if (Input.GetKeyDown (KeyCode.LeftArrow)) {
+
+		if (esquerda)
+		{
+			if (SimpleInput.GetKeyDown(KeyCode.LeftArrow))
+			{
 				rig.velocity += velocidade * -transform.forward * 1.4f;
-				rightFoot.SetActive (true);
-				leftFoot.SetActive (false);
+				rightFoot.SetActive(true);
+				leftFoot.SetActive(false);
 				hit += 1;
 				esquerda = false;
 			}
-			if (Input.GetKeyDown (KeyCode.RightArrow)&& velfrente > 0) {
+			if (SimpleInput.GetKeyDown(KeyCode.RightArrow) && velfrente > 0)
+			{
 				rig.velocity -= velocidade * -transform.forward * 1.4f;
 				hit = 0;
 			}
-			
-		} else {
-			if (Input.GetKeyDown (KeyCode.RightArrow)) {
+
+		}
+		else
+		{
+			if (SimpleInput.GetKeyDown(KeyCode.RightArrow))
+			{
 				rig.velocity += velocidade * -transform.forward * 1.4f;
-				rightFoot.SetActive (false);
-				leftFoot.SetActive (true);
+				rightFoot.SetActive(false);
+				leftFoot.SetActive(true);
 				hit += 1;
 				esquerda = true;
 			}
-			if (Input.GetKeyDown (KeyCode.LeftArrow)&& velfrente > 0) {
+			if (SimpleInput.GetKeyDown(KeyCode.LeftArrow) && velfrente > 0)
+			{
 				rig.velocity -= velocidade * -transform.forward * 1.4f;
 				hit = 0;
 			}
 		}
-		
+
 	}
 
-	void ControlaPosiçoes ()
+	void ControlaPosiçoes()
 	{
-		
-		if (transform.position.x < x1) {
-			functionsScript.Rotation (referencia2, this.gameObject);
-			if (AthleticsController.gameStarted) {
-				MovimentaCurva ();
+
+		if (transform.position.x < x1)
+		{
+			functionsScript.Rotation(referencia2, this.gameObject);
+			if (AthleticsController.gameStarted)
+			{
+				MovimentaCurva();
 			}
 
-		} else {
-			
-			if (transform.position.x < /*x*/ x-2f) {
-				Movimenta ();
-				if (transform.position.z <= 18f) {
+		}
+		else
+		{
+
+			if (transform.position.x < /*x*/ x - 2f)
+			{
+				Movimenta();
+				if (transform.position.z <= 18f)
+				{
 					rig.drag = 0.8f;
-					rig.velocity = new Vector3 (rig.velocity.x, 0, 0);
-					transform.rotation = Quaternion.Euler (new Vector3 (0, 270, 0));
+					rig.velocity = new Vector3(rig.velocity.x, 0, 0);
+					transform.rotation = Quaternion.Euler(new Vector3(0, 270, 0));
 					vellado = 0;
 					velfrente = 0;
 					fim = true;
 					y = rig.velocity.x;
-				} else {
-
-					rig.velocity = new Vector3 (rig.velocity.x, 0, 0);	
-					transform.rotation = Quaternion.Euler (new Vector3 (0, 90, 0));
-					if (transform.position.x < -46 && fim) {
-						termina = true;
-						Sounds.PlayAudio (Sounds.applause);
-						functionsScript.stopMove (rig);
-						sbtimer.SetActive (false);
-					}
-					
 				}
-			}else {
-			/*	functionsScript.Rotation (referencia, this.gameObject);
-				rig.drag = 1f;
-				MovimentaCurva ();
-				if (!transformavelocidade) {
-					velfrente = n * y * 1.4f;
-					vellado = m * y * 1.4f;
-					transformavelocidade = true;				
-				}			
-			*/	Movimenta ();
-				if (transform.position.x < 52 && fim) {
+				else
+				{
+
+					rig.velocity = new Vector3(rig.velocity.x, 0, 0);
+					transform.rotation = Quaternion.Euler(new Vector3(0, 90, 0));
+					if (transform.position.x < -46 && fim)
+					{
+						termina = true;
+						Sounds.PlayAudio(Sounds.applause);
+						functionsScript.stopMove(rig);
+						sbtimer.SetActive(false);
+					}
+
+				}
+			}
+			else
+			{
+				/*	functionsScript.Rotation (referencia, this.gameObject);
+					rig.drag = 1f;
+					MovimentaCurva ();
+					if (!transformavelocidade) {
+						velfrente = n * y * 1.4f;
+						vellado = m * y * 1.4f;
+						transformavelocidade = true;				
+					}			
+				*/
+				Movimenta();
+				if (transform.position.x < 52 && fim)
+				{
 					termina = true;
-					Sounds.PlayAudio (Sounds.applause);
-					functionsScript.stopMove (rig);
-					sbtimer.SetActive (false);
-					rightFoot.SetActive (false);
-					leftFoot.SetActive (false);
+					Sounds.PlayAudio(Sounds.applause);
+					functionsScript.stopMove(rig);
+					sbtimer.SetActive(false);
+					rightFoot.SetActive(false);
+					leftFoot.SetActive(false);
 				}
 
 			}
 		}
 	}
 
-	void Bonus ()
+	void Bonus()
 	{
-		
-		if (hit >= 20) {
-			
-			bonusnumber += 10; 
-			fallingCoin.coinFallAnimation ();
-			hit = 0;
 
-			sD = StoreDataContainer.Load();
-			sD.storeObjects[0].coin += 10;
-			sD.Save();
+		if (hit >= 20)
+		{
 
-				
-		} 
-		bonus.text = "" + bonusnumber; 
-		
+			//bonusnumber += 10;
+			//fallingCoin.coinFallAnimation();
+			//hit = 0;
+
+			//sD = StoreDataContainer.Load();
+			//sD.storeObjects[0].coin += 10;
+			//sD.Save();
+
+
+		}
+		bonus.text = "" + bonusnumber;
+
 	}
 
-	public void startRunning ()
+	public void startRunning()
 	{
-		
-		rightFoot.SetActive (false);
-		leftFoot.SetActive (true);
+
+		rightFoot.SetActive(false);
+		leftFoot.SetActive(true);
 		rig.velocity += -transform.forward * 25;
 		velfrente = n * 20;
 		vellado = m * 20;
 		start = true;
 		pronto = false;
-		t.SetTimer ();
+		t.SetTimer();
 		startedRunning = true;
-	
+
 	}
 
 
-	
-	void Update ()
+
+	void Update()
 	{
-	
+		TesteMobile();
 		float m = 1;
 
 
-		e1 = Mathf.Abs (rig.velocity.x);
-		e2 = Mathf.Abs (rig.velocity.y);
-		e3 = Mathf.Abs (rig.velocity.z);
+		e1 = Mathf.Abs(rig.velocity.x);
+		e2 = Mathf.Abs(rig.velocity.y);
+		e3 = Mathf.Abs(rig.velocity.z);
 		e4 = e1 + e3;
 
 		e5 = rig.angularVelocity.magnitude;
-		
-		if (e4 >= 1f) {
-			v1.SetActive (true);
-			if (e4 * m >= 3f) {
-				v2.SetActive (true);
 
-				if (e4 * m >= 7f) {
-					v3.SetActive (true);
+		if (e4 >= 1f)
+		{
+			v1.SetActive(true);
+			if (e4 * m >= 3f)
+			{
+				v2.SetActive(true);
 
-					if (e4 * m >= 9f) {
-						v4.SetActive (true);
+				if (e4 * m >= 7f)
+				{
+					v3.SetActive(true);
 
-						if (e4 * m >= 10.5f) {
-							v5.SetActive (true);
-						} else {
-							v5.SetActive (false);
+					if (e4 * m >= 9f)
+					{
+						v4.SetActive(true);
+
+						if (e4 * m >= 10.5f)
+						{
+							v5.SetActive(true);
 						}
-					} else {
-						v4.SetActive (false);
-						v5.SetActive (false);
+						else
+						{
+							v5.SetActive(false);
+						}
 					}
-				} else {
-					v3.SetActive (false);
-					v4.SetActive (false);
-					v5.SetActive (false);
+					else
+					{
+						v4.SetActive(false);
+						v5.SetActive(false);
+					}
 				}
-			} else {
-				v2.SetActive (false);
-				v3.SetActive (false);
-				v4.SetActive (false);
-				v5.SetActive (false);
+				else
+				{
+					v3.SetActive(false);
+					v4.SetActive(false);
+					v5.SetActive(false);
+				}
 			}
-		} else {
-			v1.SetActive (false);
-			v2.SetActive (false);
-			v3.SetActive (false);
-			v4.SetActive (false);
+			else
+			{
+				v2.SetActive(false);
+				v3.SetActive(false);
+				v4.SetActive(false);
+				v5.SetActive(false);
+			}
+		}
+		else
+		{
+			v1.SetActive(false);
+			v2.SetActive(false);
+			v3.SetActive(false);
+			v4.SetActive(false);
 		}
 
 
 
-
-	
 		//tempo.text = playertime.ToString ("0.0");
 
 
-		if (t.time >= 3 && footSupportsDeleted == false) {
-			
-			footSupports.SetActive (false);
-			footSupportsDeleted = true;
-			t.ResetTimer ();
-		}
-		
+		if (t.time >= 3 && footSupportsDeleted == false)
+		{
 
-		functionsScript.Animation (rig, animator);
-        //Debug.Log(""+rig.velocity.magnitude);
-		if (startedRunning && !termina) {
-		
+			footSupports.SetActive(false);
+			footSupportsDeleted = true;
+			t.ResetTimer();
+		}
+
+
+		functionsScript.Animation(rig, animator);
+		//Debug.Log(""+rig.velocity.magnitude);
+		if (startedRunning && !termina)
+		{
+
 			playertime += Time.deltaTime;
-			if (start) {
-				ControlaPosiçoes ();
-				Bonus ();
+			if (start)
+			{
+				ControlaPosiçoes();
+				Bonus();
 
 			}
-		} 
+		}
+	}
+
+	void TesteMobile()
+    {
+  //      if (SimpleInput.GetKeyDown(KeyCode.RightArrow))
+  //      {
+		//	Debug.Log("Direita");
+  //      }
+		//if (SimpleInput.GetKeyDown(KeyCode.LeftArrow))
+		//{
+		//	Debug.Log("Esquerda");
+		//}
 	}
 }

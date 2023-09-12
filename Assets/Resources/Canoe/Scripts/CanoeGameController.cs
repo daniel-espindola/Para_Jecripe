@@ -1,12 +1,14 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
-using PlayFab;
-using PlayFab.ClientModels;
-using System.Collections;
+using UnityStandardAssets.CrossPlatformInput;
+
 
 public class CanoeGameController : MonoBehaviour {
-    public PlayfabManager playfab;
+   
     public CoinManager coin;
+    public int premioPrimeiro, premioGameOver; 
+    public Text coinText;
+    public Text getText;
     public GameObject canvas;
     public GameObject startCanvas;
     public GameObject gameOverCanvas;
@@ -39,11 +41,19 @@ public class CanoeGameController : MonoBehaviour {
         score = new string[3];
         scoreInd = 0;
         paddleSound = paddleSound.GetComponent<AudioSource>();
+        getText.text = coin.GetCoins().ToString();
+
 	}
 	
 	// Update is called once per frame
 	void Update () {
 	    if(start == false && Input.GetKeyDown(KeyCode.Space))
+        {
+            start = true;
+            startCanvas.SetActive(false);
+            canvas.SetActive(true);
+        }
+        if (start == false && CrossPlatformInputManager.GetButtonDown("Space"))
         {
             start = true;
             startCanvas.SetActive(false);
@@ -55,13 +65,13 @@ public class CanoeGameController : MonoBehaviour {
             string timeStr = ((int)time / 60).ToString("00") + ":" + ((int)time % 60).ToString("00") + ":" + (int)((time-(int)time)*100);
             timeText.text = timeStr;
             CalculatePosition();
-            coinsText.text = "Você recebeu"+"25"+"moedas.";
+           // coinsText.text = "Você recebeu"+"25"+"moedas.";
         }
 	}
 
     void OnTriggerEnter(Collider c)
     {
-        if(c.gameObject.tag == "Player")
+        if (c.gameObject.tag == "Player")
         {
             CanoePlayerController cpc = c.gameObject.GetComponent<CanoePlayerController>();
             cpc.start = false;
@@ -96,6 +106,7 @@ public class CanoeGameController : MonoBehaviour {
 
     void GameOver()
     {
+        Grant();
         canvas.SetActive(false);
         gameOverCanvas.SetActive(true);
         if (score[1] == null)
@@ -148,23 +159,22 @@ public class CanoeGameController : MonoBehaviour {
     {
         coins += c;
     }
-
-    public void GrantVirtualCurrency()
+    void Grant()
     {
-        var request = new AddUserVirtualCurrencyRequest
+        if(player.transform.position.z <= adv1.transform.position.z && player.transform.position.z <= adv2.transform.position.z)
         {
-            VirtualCurrency = "PJ",
-            Amount = 50
-        };
-        PlayFabClientAPI.AddUserVirtualCurrency(request, OnGrantVirtualCurrencySuccess, OnError);
+            coin.AddCoins(premioPrimeiro);
+            coinText.text = "Você ganhou " + premioPrimeiro.ToString() + " moedas";
+        }
+        else if(player.transform.position.z > adv1.transform.position.z && player.transform.position.z > adv2.transform.position.z)
+        {
+            coin.AddCoins(premioGameOver);
+            coinText.text = "Você ganhou " + premioGameOver.ToString() + " moedas";
+        }
+        else
+            coin.AddCoins(premioGameOver);
+        coinText.text = "Você ganhou " + premioGameOver.ToString() + " moedas";
     }
-    void OnGrantVirtualCurrencySuccess(ModifyUserVirtualCurrencyResult result)
-    {
-        Debug.Log("Currency granted!");
-        playfab.GetVirtualCurrencies();
-    }
-    void OnError(PlayFabError error)
-    {
-        Debug.Log("Error: " + error.ErrorMessage);
-    }
+
+    
 }

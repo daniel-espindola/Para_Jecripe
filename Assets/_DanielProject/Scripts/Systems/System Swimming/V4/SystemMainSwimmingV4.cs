@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using UnityEngine;
+using UnityStandardAssets.CrossPlatformInput;
 
 public class SystemMainSwimmingV4 : MonoBehaviour
 {
@@ -36,6 +37,10 @@ public class SystemMainSwimmingV4 : MonoBehaviour
     [Header("Pause Settings")]
     public GameObject pauseObject;
 
+    [Header("Mobile")]
+    public GameObject startButton;
+    public GameObject oxygenButton;
+
     void Awake()
     {
         instance = this;
@@ -63,6 +68,13 @@ public class SystemMainSwimmingV4 : MonoBehaviour
                 {
                     StartGame();
                 }
+                //Mobile
+                if (CrossPlatformInputManager.GetButtonDown("Space"))
+                {
+                    StartGame();
+                    startButton.SetActive(false);
+                }
+                
             }
             else
             {
@@ -74,6 +86,16 @@ public class SystemMainSwimmingV4 : MonoBehaviour
                     Breathing();
                 }
                 else if (Input.GetKeyUp(KeyCode.Space))
+                {
+                    isBreathing = false;
+                }
+                //Mobile
+                if (CrossPlatformInputManager.GetButtonDown("Space"))
+                {
+                    isBreathing = true;
+                    Breathing();
+                }
+                else if (CrossPlatformInputManager.GetButtonUp("Space"))
                 {
                     isBreathing = false;
                 }
@@ -90,13 +112,20 @@ public class SystemMainSwimmingV4 : MonoBehaviour
                 if (currentOxygen < 35)
                 {
                     oxygenWarningObject.SetActive(true);
+                    oxygenButton.SetActive(true);
                 }
                 else
                 {
                     oxygenWarningObject.SetActive(false);
+                    oxygenButton.SetActive(false);
                 }
 
                 if (Input.GetKeyDown(KeyCode.P))
+                {
+                    PauseGame();
+                }
+                //Mobile
+                if (CrossPlatformInputManager.GetButtonDown("P"))
                 {
                     PauseGame();
                 }
@@ -105,6 +134,11 @@ public class SystemMainSwimmingV4 : MonoBehaviour
         else
         {
             if (Input.GetKeyDown(KeyCode.P))
+            {
+                ResumeGame();
+            }
+            //Mobile
+            if (CrossPlatformInputManager.GetButtonDown("P"))
             {
                 ResumeGame();
             }

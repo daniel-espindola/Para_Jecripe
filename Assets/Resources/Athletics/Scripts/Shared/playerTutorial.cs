@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
+using UnityStandardAssets.CrossPlatformInput;
 
 public class playerTutorial : MonoBehaviour {
 
@@ -53,14 +54,14 @@ public class playerTutorial : MonoBehaviour {
 		}
 		
 		if (!change) {
-			if (Input.GetKeyDown (KeyCode.LeftArrow)) {
+			if (SimpleInput.GetKeyDown (KeyCode.LeftArrow)) {
 				rig.velocity += velocity * -transform.forward;
 				rightFoot.SetActive (true);
 				leftFoot.SetActive (false);
 				change = true;
 			}
 		} else {
-				if (Input.GetKeyDown (KeyCode.RightArrow)) {
+				if (SimpleInput.GetKeyDown (KeyCode.RightArrow)) {
 				rig.velocity += velocity * -transform.forward;
 				rightFoot.SetActive (false);
 				leftFoot.SetActive (true);
@@ -82,19 +83,35 @@ public class playerTutorial : MonoBehaviour {
 			if(Time.timeSinceLevelLoad >= 0.9 && Time.timeSinceLevelLoad < 3.4){
  				b1.GetComponentInChildren<Text>().text = "Seja bem-vindo(a) ao jogo de corrida!";
 			} else if (Time.timeSinceLevelLoad >= 3.4){
-				b1.GetComponentInChildren<Text>().text = "Aperte ENTER para aprender a jogar!";
+
+#if MOBILE_INPUT
+				b1.GetComponentInChildren<Text>().text = "Aperte AQUI para aprender a jogar!";
+#else
+           b1.GetComponentInChildren<Text>().text = "Aperte ENTER para aprender a jogar!";
+#endif
 			}
-			
-			
-			if(Input.GetKeyDown(KeyCode.Return)){
+
+
+			if (Input.GetKeyDown(KeyCode.Return)){
 				okCount++;
 				start = true;
 				b = false;
 			}
-			
+			if (CrossPlatformInputManager.GetButtonDown("Return"))
+			{
+				okCount++;
+				start = true;
+				b = false;
+			}
+
 		} else if (okCount == 1){
-			
-			b1.GetComponentInChildren<Text>().text = "Para dar a largada, aperte a SETA PARA CIMA.";
+
+#if MOBILE_INPUT
+			b1.GetComponentInChildren<Text>().text = "Para dar a largada, aperte a SETA PARA ESQUERDA.";
+#else
+           b1.GetComponentInChildren<Text>().text = "Para dar a largada, aperte a SETA PARA CIMA.";
+#endif
+			//b1.GetComponentInChildren<Text>().text = "Para dar a largada, aperte a SETA PARA CIMA.";
 			if(Input.GetKeyDown(KeyCode.UpArrow)){
 				rig.velocity += -transform.forward * 10;
 				run = true;
@@ -102,14 +119,22 @@ public class playerTutorial : MonoBehaviour {
 				okCount++;
 				t.SetTimer();
 			}
-			
+			if (SimpleInput.GetKeyDown(KeyCode.LeftArrow))
+			{
+				rig.velocity += -transform.forward * 10;
+				run = true;
+				b1.SetActive(false);
+				okCount++;
+				t.SetTimer();
+			}
+
 		} else if (okCount == 2){
 			
 			if(t.time > 0.5f){
 				b2.SetActive(true);
 				Time.timeScale = 0;
 				leftFoot.SetActive(true);
-				if(Input.GetKey(KeyCode.LeftArrow)){
+				if(SimpleInput.GetKey(KeyCode.LeftArrow)){
 					okCount++;
 					Time.timeScale = 1;
 					leftFoot.SetActive(false);
@@ -137,11 +162,20 @@ public class playerTutorial : MonoBehaviour {
 			rightFoot.SetActive(false);
 			
 			if(t.time > 2.5){
-				
-				b3.GetComponentInChildren<Text>().text = "Agora ajude a Terezinha Guilhermina a vencer! Aperte ENTER para jogar";
-				if(Input.GetKeyDown(KeyCode.Return)){
+
+#if MOBILE_INPUT
+				b3.GetComponentInChildren<Text>().text = "Agora ajude a Terezinha Guilhermina a vencer! Aperte AQUI para jogar";
+#else
+            b3.GetComponentInChildren<Text>().text = "Agora ajude a Terezinha Guilhermina a vencer! Aperte ENTER para jogar";;
+#endif
+				if (Input.GetKeyDown(KeyCode.Return)){
 					Application.LoadLevel("AthleticsGame");
 				}
+				if (CrossPlatformInputManager.GetButtonDown("Return"))
+				{
+					Application.LoadLevel("AthleticsGame");
+				}
+
 			}
 		}
 		

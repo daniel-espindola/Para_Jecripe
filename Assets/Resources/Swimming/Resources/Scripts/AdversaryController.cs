@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityStandardAssets.CrossPlatformInput;
 
 public class AdversaryController : MonoBehaviour {
 
@@ -20,7 +21,11 @@ public class AdversaryController : MonoBehaviour {
             isStarted = true;
             animator.SetTrigger("JumpOp1");
         }
-
+        if (Time.timeSinceLevelLoad >= 2 && CrossPlatformInputManager.GetButtonDown("Space"))
+        {
+            isStarted = true;
+            animator.SetTrigger("JumpOp1");
+        }
         if (isStarted && transform.position.y < 708f)
             rb.velocity = new Vector3(0f, 0f, Random.Range(2f, 5f));
 

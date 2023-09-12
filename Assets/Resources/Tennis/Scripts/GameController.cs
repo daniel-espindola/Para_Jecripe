@@ -1,15 +1,17 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
+using UnityStandardAssets.CrossPlatformInput;
 
 public class GameController : MonoBehaviour
 {
     public CoinManager coinManager;
     public int primeirolugar;
     public int gameOver;
-    //public Text coinstext;
+    public Text coinsTextAtual;
+    public Text coinsTextGrant;
 
-    public PlayfabManager playfab;
+    
     public GameObject player;
     private PlayerController pC;
     public GameObject pHitArea;
@@ -85,6 +87,7 @@ public class GameController : MonoBehaviour
         pauseCanvas = GameObject.Find("PauseCanvas");
         pauseCanvas.SetActive(false);
         Time.timeScale = 1;
+        coinsTextAtual.text = coinManager.GetCoins().ToString();
     }
 
     public void Ready()
@@ -133,13 +136,16 @@ public class GameController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //coinstext.text = coinManager.GetCoins().ToString();
+        coinsTextAtual.text = coinManager.GetCoins().ToString();
 
         if (Input.GetKeyDown(KeyCode.P))
         {
             PauseGame();
         }
-
+        if (CrossPlatformInputManager.GetButtonDown("P"))
+        {
+            PauseGame();
+        }
         if (fadeOut == true)
         {
             fadeTime += Time.deltaTime;
@@ -235,7 +241,7 @@ public class GameController : MonoBehaviour
                 enemyScore = 0;
                 playerScore = 0;
                 serve *= -1;
-                coinManager.AddCoins(primeirolugar);
+
             }
             else if (enemyScore == 4 && playerScore < 3)
             {
@@ -245,7 +251,7 @@ public class GameController : MonoBehaviour
                 enemyScore = 0;
                 playerScore = 0;
                 serve *= -1;
-                coinManager.AddCoins(gameOver);
+
             }
             else if (enemyScore == 4 && playerScore == 4)
             {
@@ -253,7 +259,7 @@ public class GameController : MonoBehaviour
                 playerScore = 3;
                 enemyScore = 3;
                 ShowPoints();
-                coinManager.AddCoins(gameOver);
+
             }
             else if (playerScore == 5)
             {
@@ -264,7 +270,7 @@ public class GameController : MonoBehaviour
                 enemyScore = 0;
                 playerScore = 0;
                 serve *= -1;
-                coinManager.AddCoins(primeirolugar);
+
             }
             else if (enemyScore == 5)
             {
@@ -274,7 +280,7 @@ public class GameController : MonoBehaviour
                 enemyScore = 0;
                 playerScore = 0;
                 serve *= -1;
-                coinManager.AddCoins(gameOver);
+
             }
             if (playerGameCount == 2)
             {
@@ -287,7 +293,7 @@ public class GameController : MonoBehaviour
                 ShowSetScore();
                 playerGameCount = 0;
                 enemyGameCount = 0;
-                coinManager.AddCoins(primeirolugar);
+
             }
             else if (enemyGameCount == 2)
             {
@@ -296,7 +302,7 @@ public class GameController : MonoBehaviour
                 ShowSetScore();
                 playerGameCount = 0;
                 enemyGameCount = 0;
-                coinManager.AddCoins(gameOver);
+
 
             }
         }
@@ -467,8 +473,15 @@ public class GameController : MonoBehaviour
         inGame = false;
         GameOver.SetActive(true);
         //results.text = "RESULTADO\n1-"+winner+"\n2-"+loser+ "\nVocê ganhou "+points+" moedas";
-        results.text = "RESULTADO\n1-" + winner + "\n2-" + loser + "\nVocê ganhou 50 moedas";
-        playfab.GrantVirtualCurrency();
+
+        if (enemySetCount == 2)
+        {
+            results.text = "RESULTADO\n1-" + winner + "\n2-" + loser + "\nVocê ganhou" + gameOver + "moedas";
+        }
+        if (playerSetCount == 2)
+        {
+            results.text = "RESULTADO\n1-" + winner + "\n2-" + loser + "\nVocê ganhou" + primeirolugar + "moedas";
+        }
     }
 
     void GameWon()
@@ -543,4 +556,3 @@ public class GameController : MonoBehaviour
 
     }
 }
-

@@ -1,42 +1,36 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
+using UnityStandardAssets.CrossPlatformInput;
 
 public class SwimmingGameController : MonoBehaviour
 {
-
+	
+	[Header("Coin Manager")]
 	public CoinManager coinManager;
 	public int coinPrimeiroLugar;
 	public int coinGameOver;
-
-	GameObject player;
-	Timer at;
-	Vector3 maxvel;
-	Vector3 movement;
-
-	string lastSide;
-
-	Text pointText;
-	int points;
-	public bool inWater;
-
-	int armStrokeCount;
-
-	FallingCoin fc;
-
-	GameObject canvas1;
-	GameObject pauseCanvas;
-
-
-	GameObject gameOverCanvas;
-	Text gameOverTitle;
-	Text gameOverText;
-
-	GameObject gameOverTextBox;
-	GameObject winnerBoard;
-
-	public GameObject OponentsParticleSystem;
+	[Header("Ui")]
+	public GameObject uI;
+	public GameObject pauseCanvas;
+	public GameObject gameOverCanvas;
+	public GameObject winnerBoard;
+	public GameObject gameOverTextBox;
+	public GameObject result;
+	public Text gameOverTitle;
+	public Text gameOverText;
+	public Text pointText;
+	public Text place1;
+	public Text place2;
+	public Text place3;
+	[Header("Game Controller")]
 	public bool isMasculine = true;
+	public bool b1 = false;
+	public bool inWater;
+	public Timer at;
+	public FallingCoin fc;
+	public SwimmingSounds sounds;
+	public GameObject player;
 	public GameObject op1;
 	public GameObject op1parent;
 	public GameObject op2;
@@ -46,43 +40,25 @@ public class SwimmingGameController : MonoBehaviour
 	public GameObject thirdPlace;
 	public GameObject positionstext;
 	public GameObject settingsCanvas;
-
+	public GameObject OponentsParticleSystem;	
 	public ParticleSystem pLeft;
 	public ParticleSystem pRight;
-
-	GameObject result;
-
-	public bool b1 = false;
-
-
-	public Text place1;
-	public Text place2;
-	public Text place3;
-
-	public SwimmingSounds sounds;
-
-	private StoreDataContainer sD;
-
+	public float rotateNew;
+	//Privates
+	Vector3 maxvel;
+	Vector3 movement;
+	string lastSide;
+	int points;	
+	int armStrokeCount;
 	Vector3 rotationVector;
 
-	public float rotateNew;
+	//Legacy
+	private StoreDataContainer sD;
+
 	void Start()
 	{
 
-		player = GameObject.Find("Player");
-		at = GameObject.Find("ArmstrokeTimer").GetComponent<Timer>();
-		pointText = GameObject.Find("PointsText").GetComponent<Text>();
-		gameOverCanvas = GameObject.Find("GameOver");
-		gameOverTitle = GameObject.Find("GameOverTitle").GetComponent<Text>();
-		gameOverText = GameObject.Find("TextBoxText").GetComponent<Text>();
-		gameOverTextBox = GameObject.Find("TextBox");
-		winnerBoard = GameObject.Find("WinnerBoard");
-		fc = GameObject.Find("FallingCoin").GetComponent<FallingCoin>();
-		canvas1 = GameObject.Find("Canvas1");
-		pauseCanvas = GameObject.Find("PauseCanvas");
-		sounds = GameObject.Find("SwimmingSounds").GetComponent<SwimmingSounds>();
-		result = GameObject.Find("Result");
-		canvas1.SetActive(true);
+		uI.SetActive(true);
 
 		pauseCanvas.SetActive(false);
 		gameOverCanvas.SetActive(false);
@@ -122,6 +98,20 @@ public class SwimmingGameController : MonoBehaviour
 		else if (Input.GetKeyDown(KeyCode.P))
 		{
 			PauseGame();
+		}
+		//Mobile
+		else if (CrossPlatformInputManager.GetButtonDown("P"))
+		{
+			PauseGame();
+		}
+		//Mobile
+		if (CrossPlatformInputManager.GetButtonDown("LeftArrow") && inWater)
+		{
+			ArmStroke("left", "leftArmStrokeTrigger");
+		}
+		else if (CrossPlatformInputManager.GetButtonDown("RightArrow") && inWater)
+		{
+			ArmStroke("right", "rightArmStrokeTrigger");
 		}
 		////rotationVector.x = 0;
 	}
@@ -225,7 +215,7 @@ public class SwimmingGameController : MonoBehaviour
 			sounds.PlaySound(sounds.applause);
 			addPoints(1000);
 			coinManager.AddCoins(coinPrimeiroLugar);
-
+			result.GetComponentInChildren<Text>().text = "Você ganhou " + coinPrimeiroLugar.ToString("0") + " moedas!";
 		}
 		else
 		{
@@ -234,6 +224,7 @@ public class SwimmingGameController : MonoBehaviour
 			{
 				addPoints(700);
 				coinManager.AddCoins(coinGameOver);
+				result.GetComponentInChildren<Text>().text = "Você ganhou " + coinGameOver.ToString("0") + " moedas!";
 			}
 		}
 
@@ -242,7 +233,7 @@ public class SwimmingGameController : MonoBehaviour
 		place2.text = secondPlace.name;
 		place3.text = thirdPlace.name;
 		positionstext.SetActive(false);
-		result.GetComponentInChildren<Text>().text = "Você ganhou " + points.ToString("0") + " moedas!";
+		
 
 
 	}
@@ -278,7 +269,7 @@ public class SwimmingGameController : MonoBehaviour
 	public void GameOver(bool noMoreOxygen)
 	{
 		result.SetActive(false);
-		canvas1.SetActive(false);
+		uI.SetActive(false);
 		Time.timeScale = 0;
 		gameOverCanvas.SetActive(true);
 		winnerBoard.SetActive(false);
@@ -286,9 +277,9 @@ public class SwimmingGameController : MonoBehaviour
 		gameOverText.text = "Use a tecla ESPAÇO para respirar!\nNade outra vez!";
 		positionstext.SetActive(false);
 
-		sD = StoreDataContainer.Load();
-		sD.storeObjects[0].coin += points;
-		sD.Save();
+		//sD = StoreDataContainer.Load();
+		//sD.storeObjects[0].coin += points;
+		//sD.Save();
 	}
 
 	public void PauseGame()
@@ -298,13 +289,13 @@ public class SwimmingGameController : MonoBehaviour
 		{
 			Time.timeScale = 0;
 			pauseCanvas.SetActive(true);
-			canvas1.SetActive(false);
+			uI.SetActive(false);
 		}
 		else if (Time.timeScale == 0)
 		{
 			Time.timeScale = 1;
 			pauseCanvas.SetActive(false);
-			canvas1.SetActive(true);
+			uI.SetActive(true);
 			settingsCanvas.SetActive(false);
 		}
 	}

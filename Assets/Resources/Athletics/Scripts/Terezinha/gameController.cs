@@ -6,10 +6,11 @@ using System.Collections;
 
 public class gameController : MonoBehaviour {
 
-	public PlayfabManager playfabManager;
+	
 	public CoinManager coinManager;
 	public int primeiro, segundo, terceiro;
 	public Text result;
+	public Text getText;
 
 	public string breakRecord = "";
 
@@ -20,7 +21,7 @@ public class gameController : MonoBehaviour {
 	private float time1,time2,time3, time4, aux; 
 	private string first, second, third, fourth, saux,medal;
 	private bool end, save,pF,pS,pT;
-
+	int coin;
 	GameObject gameOverCanvas;
 	GameObject canvas;
 
@@ -35,8 +36,8 @@ public class gameController : MonoBehaviour {
 	
 	
 	
-	void Start () {	
-		
+	void Start () {
+		getText.text = coinManager.GetCoins().ToString();
 		adversaryScript = GameObject.Find ("adversary").GetComponent<enemyBehaviour>();
 		adversary2Script = GameObject.Find ("adversary2").GetComponent<enemyBehaviour2>();
 		adversary3Script = GameObject.Find ("adversary3").GetComponent<enemyBehaviour3>();
@@ -88,7 +89,7 @@ public class gameController : MonoBehaviour {
 	}
 	
 	public void BackToMenu(){
-		Application.LoadLevel ("PlayAthletics");
+		Application.LoadLevel("PlayAthletics");
 	}
 	
 	void scoreBuilder(){
@@ -99,7 +100,7 @@ public class gameController : MonoBehaviour {
 		place3.text = third;
 		place4.text = fourth;
 
-		result.text = "Parabéns, você ganhou "+(playerBehaviour2.bonusnumber+prizecoins) +" moedas!";
+		result.text = "Parabéns, você ganhou "+ coin.ToString() +" moedas!";
 
 
 		end = true;
@@ -118,7 +119,7 @@ public class gameController : MonoBehaviour {
 			third = adversaryScript.adversary.name;
 			fourth = adversary3Script.adversary.name;
 				p=1;
-				coinManager.AddCoins(primeiro);
+				
 			}
 		}
 		else if (playerBehaviour2.termina ==true && pF==false && pT==false){
@@ -131,7 +132,7 @@ public class gameController : MonoBehaviour {
 			fourth = adversary2Script.adversary.name;
 				p=2;
 			}
-			coinManager.AddCoins(segundo);
+			
 		}
 
 		else if (pF=false && pS==false){
@@ -144,7 +145,7 @@ public class gameController : MonoBehaviour {
 			fourth = adversaryScript.adversary.name;
 				p=3;
 			}
-			coinManager.AddCoins(terceiro);
+			
 		}
 		else if (playerBehaviour2.termina ==false && adversaryScript.termina == true && adversary2Script.termina == true && adversary3Script.termina == true)
 		{
@@ -161,11 +162,11 @@ public class gameController : MonoBehaviour {
 		{
 			pF=pS=pT=false;
 		}
-		Debug.Log(p);
-		Debug.Log("first"+first);
-		Debug.Log("second"+second);
-		Debug.Log("third"+third);
-		Debug.Log("four"+fourth);
+		//Debug.Log(p);
+		//Debug.Log("first"+first);
+		//Debug.Log("second"+second);
+		//Debug.Log("third"+third);
+		//Debug.Log("four"+fourth);
 	}
 	
 	public void showPrize(){
@@ -176,8 +177,8 @@ public class gameController : MonoBehaviour {
 			second = adversary2Script.adversary.name;
 			third = adversaryScript.adversary.name;
 			fourth = adversary3Script.adversary.name;
-			GrantVirtualCurrency();
-
+			coinManager.AddCoins(primeiro);
+			coin = primeiro;
 			//medal = "Parabéns você ganhou medalha de ouro e "+prizecoins +" moedas!";
 		}
 		else if ((p==2)) {
@@ -186,7 +187,8 @@ public class gameController : MonoBehaviour {
 			second = "Terezinha Guilhermina e \nRafael Lazarini";
 			third = adversaryScript.adversary.name;
 			fourth = adversary2Script.adversary.name;
-			GrantVirtualCurrency();
+			coinManager.AddCoins(segundo);
+			coin = segundo;
 			//medal = "Parabéns você ganhou medalha de prata e "+prizecoins +" moedas!";
 		}
 		else if ((p==3)) {
@@ -195,7 +197,8 @@ public class gameController : MonoBehaviour {
 			second = adversary2Script.adversary.name;
 			third = "Terezinha Guilhermina e \nRafael Lazarini";
 			fourth = adversaryScript.adversary.name;
-			GrantVirtualCurrency();
+			coinManager.AddCoins(terceiro);
+			coin = terceiro;
 			//medal = "Parabéns você ganhou medalha de bronze e "+prizecoins +" moedas!";;
 		}
 		else if ((p==4)) {
@@ -204,13 +207,14 @@ public class gameController : MonoBehaviour {
 			second = adversary2Script.adversary.name;
 			third = adversaryScript.adversary.name;
 			fourth = "Terezinha Guilhermina e \nRafael Lazarini";
+			coin = 0;
 		}
 
 		if( end == true && playerBehaviour2.termina==true && save == false){
-			sD = StoreDataContainer.Load();
-			sD.storeObjects[0].coin += prizecoins;
-			sD.Save();
-			save = true;
+			//sD = StoreDataContainer.Load();
+			//sD.storeObjects[0].coin += prizecoins;
+			//sD.Save();
+			//save = true;
 		}
 
 		result.text = "Parabéns você ganhou "+(playerBehaviour2.bonusnumber+prizecoins) +" moedas!";
@@ -258,22 +262,5 @@ public class gameController : MonoBehaviour {
 		
 	}
 
-	void OnError(PlayFabError error)
-	{
-		Debug.Log("Error: " + error.ErrorMessage);
-	}
-	void OnGrantVirtualCurrencySuccess(ModifyUserVirtualCurrencyResult result)
-	{
-		Debug.Log("Currency granted!");
-		playfabManager.GetVirtualCurrencies();
-	}
-	public void GrantVirtualCurrency()
-	{
-		var request = new AddUserVirtualCurrencyRequest
-		{
-			VirtualCurrency = "PJ",
-			Amount = prizecoins
-		};
-		PlayFabClientAPI.AddUserVirtualCurrency(request, OnGrantVirtualCurrencySuccess, OnError);
-	}
+	
 }

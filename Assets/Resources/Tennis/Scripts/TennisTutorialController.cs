@@ -1,9 +1,12 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
+using UnityStandardAssets.CrossPlatformInput;
 
 public class TennisTutorialController : MonoBehaviour
 {
+	[Header("Mobile")]
+	public VariableJoystick variableJoystick;
 
 	public GameObject okMessage;
 	private float timer;
@@ -59,12 +62,19 @@ public class TennisTutorialController : MonoBehaviour
 			if (Time.timeSinceLevelLoad > 0.8 && Time.timeSinceLevelLoad < 3) {
 				instWindowText.text = "Seja bem-vindo(a) ao jogo de tênis em cadeira de rodas!";
 			} else if (Time.timeSinceLevelLoad >= 3) {
-				instWindowText.text = "Aperte ENTER para aprender a jogar!";
+				instWindowText.text = "Aperte ENTER ou toque AQUI para aprender a jogar!";
 				if (Input.GetKeyDown (KeyCode.Return)) {
 					okCount++;
 					GameObject.Find ("Balloon1").SetActive (false);
 					b2.SetActive (true);
 					t.SetTimer ();
+				}
+				if (CrossPlatformInputManager.GetButtonDown("Return"))
+				{
+					okCount++;
+					GameObject.Find("Balloon1").SetActive(false);
+					b2.SetActive(true);
+					t.SetTimer();
 				}
 			} 
 			
@@ -72,11 +82,16 @@ public class TennisTutorialController : MonoBehaviour
 		} else if (okCount == 1) {
 		
 			if (t.time > 0.5) {
-				b2.GetComponentInChildren<Text> ().text = "Use as SETAS ou WASD para se mover";
+				b2.GetComponentInChildren<Text> ().text = "Use as SETAS ou WASD para se mover, se estiver no mobile use o Joystick.";
 				if (canContinue == false && waiting == false) {		
 					if (Input.GetAxis ("Horizontal") != 0 || Input.GetAxis ("Vertical") != 0) {
 						okCount++;
 						t.SetTimer ();
+					}
+					if (variableJoystick.Horizontal != 0 || variableJoystick.Vertical != 0)
+					{
+						okCount++;
+						t.SetTimer();
 					}
 				}
 			}
@@ -159,19 +174,18 @@ public class TennisTutorialController : MonoBehaviour
 			} else if (t.time > 4.5 && t.time < 8.3){
 				b6.GetComponentInChildren<Text>().text = "Lembre-se: a bola pode quicar DUAS vezes antes de ser rebatida";
 			} else if (t.time >= 8.3){
-				b6.GetComponentInChildren<Text>().text = "Aperte ENTER para jogar";
-                if (Input.GetKeyDown(KeyCode.Return))
+				b6.GetComponentInChildren<Text>().text = "Aperte ENTER para jogar ou toque AQUI.";/*ou toque na tala.*/
+				if (Input.GetKeyDown(KeyCode.Return))
                 {
                     Application.LoadLevel("TennisGame");
                 }
+				if (CrossPlatformInputManager.GetButtonDown("Return"))
+				{
+					Application.LoadLevel("TennisGame");
+				}
 			}
 		}	
 	}
-		
-		
-		
-		
-		
 	
 		/*LEMBRE-SE: No tenis em cadeira" +
 					" de rodas, a bola pode quicar duas vezes antes de ser rebatida*/

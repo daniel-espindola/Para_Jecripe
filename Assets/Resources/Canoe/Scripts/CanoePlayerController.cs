@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
+using UnityStandardAssets.CrossPlatformInput;
 
 public class CanoePlayerController : MonoBehaviour
 {
@@ -47,6 +48,7 @@ public class CanoePlayerController : MonoBehaviour
         else
         {
             if (Input.GetKeyDown(KeyCode.Space) && rb.velocity == Vector3.zero) start = true;
+            if (CrossPlatformInputManager.GetButtonDown("Space") && rb.velocity == Vector3.zero) start = true;
         }
         Stop();
     }
@@ -62,6 +64,31 @@ public class CanoePlayerController : MonoBehaviour
     void Move()
     {
         if (start == true && Input.GetKeyDown(KeyCode.Space))
+        {
+            if ((slider.value >= 0.4f && slider.value <= 0.6f) && (rb.velocity.magnitude < maxSpeed))
+            {
+                if (isGame)
+                    CanoeGameController.AddCoins(100);
+                rb.velocity += acceleration * -transform.forward;
+                paddleSound.SetActive(true);
+                animator.SetTrigger("Paddle");
+            }
+            else if (((slider.value >= 0.2f && slider.value < 0.4f) || (slider.value > 0.6f && slider.value <= 0.8f)) && (rb.velocity.magnitude < maxSpeed))
+            {
+                if (isGame)
+                    CanoeGameController.AddCoins(50);
+                rb.velocity += acceleration / 1.5f * -transform.forward;
+                paddleSound.SetActive(true);
+                animator.SetTrigger("Paddle");
+            }
+            else if (-rb.velocity.z > 0)
+            {
+                rb.velocity -= acceleration * -transform.forward;
+                paddleSound.SetActive(true);
+                animator.SetTrigger("Paddle");
+            }
+        }
+        if (start == true && CrossPlatformInputManager.GetButtonDown("Space"))
         {
             if ((slider.value >= 0.4f && slider.value <= 0.6f) && (rb.velocity.magnitude < maxSpeed))
             {
