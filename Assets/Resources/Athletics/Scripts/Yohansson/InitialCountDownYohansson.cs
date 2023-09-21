@@ -47,6 +47,7 @@ public class InitialCountDownYohansson : MonoBehaviour {
 			c++;
 
 		}
+#if MOBILE_INPUT
 		if (CrossPlatformInputManager.GetButtonDown("Space") && c == 0)
 		{
 
@@ -56,6 +57,7 @@ public class InitialCountDownYohansson : MonoBehaviour {
 			c++;
 
 		}
+#endif
 		else if (c == 1) {
 
 			if (t.time <= 2.5f) { 
@@ -81,6 +83,7 @@ public class InitialCountDownYohansson : MonoBehaviour {
 				p.startRunning ();
 				c++;
 			}
+#if MOBILE_INPUT
 			if (CrossPlatformInputManager.GetButtonDown("SetaEsquerda"))
 			{
 				p.startRunning();
@@ -91,8 +94,9 @@ public class InitialCountDownYohansson : MonoBehaviour {
 				p.startRunning();
 				c++;
 			}
-
-		} else if (c == 3) {
+#endif
+		}
+		else if (c == 3) {
 
 			this.gameObject.SetActive (false);
 

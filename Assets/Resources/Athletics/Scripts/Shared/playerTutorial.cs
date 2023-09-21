@@ -97,12 +97,15 @@ public class playerTutorial : MonoBehaviour {
 				start = true;
 				b = false;
 			}
-			if (CrossPlatformInputManager.GetButtonDown("Return"))
+			#if MOBILE_INPUT
+				if (CrossPlatformInputManager.GetButtonDown("Return"))
 			{
 				okCount++;
 				start = true;
 				b = false;
-			}
+			}          
+#endif
+			
 
 		} else if (okCount == 1){
 

@@ -142,10 +142,12 @@ public class GameController : MonoBehaviour
         {
             PauseGame();
         }
+#if MOBILE_INPUT
         if (CrossPlatformInputManager.GetButtonDown("P"))
         {
             PauseGame();
         }
+#endif
         if (fadeOut == true)
         {
             fadeTime += Time.deltaTime;

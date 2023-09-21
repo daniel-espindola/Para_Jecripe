@@ -66,13 +66,19 @@ public class PlayerController : MonoBehaviour
 
 		if (moveVertical < maxSpeed)
 		{
+#if MOBILE_INPUT
+		moveVertical = variableJoystick.Vertical;
+#else
 			moveVertical = Input.GetAxis("Vertical");
-			moveVertical = variableJoystick.Vertical;
+#endif
 		}
 		if (moveHorizontal < maxSpeed)
 		{
-			moveHorizontal = Input.GetAxis("Horizontal");
+#if MOBILE_INPUT
 			moveHorizontal = variableJoystick.Horizontal;
+#else
+			moveHorizontal = Input.GetAxis("Horizontal");
+#endif
 		}
 
 		if (Time.time > 0.4 + delay)
@@ -99,7 +105,7 @@ public class PlayerController : MonoBehaviour
 	{
 		a.SetBool("isServing", true);
 		hitController.isServing = true;
-		if (Input.GetKeyDown(KeyCode.Space) && canServe == true)
+		if (SimpleInput.GetKeyDown(KeyCode.Space) && canServe == true)
 		{
 			serveMessage.SetActive(false);
 			servingTime = Time.time;
@@ -107,15 +113,15 @@ public class PlayerController : MonoBehaviour
 			canServe = false;
 			BallController.ThrowBall();
 		}
-		if (CrossPlatformInputManager.GetButtonDown("Space") && canServe == true)
-		{
-			vibrationController.VibrateDevice();
-			serveMessage.SetActive(false);
-			servingTime = Time.time;
-			a.SetTrigger("Serve");
-			canServe = false;
-			BallController.ThrowBall();
-		}
+		//if (CrossPlatformInputManager.GetButtonDown("Space") && canServe == true)
+		//{
+		//	vibrationController.VibrateDevice();
+		//	serveMessage.SetActive(false);
+		//	servingTime = Time.time;
+		//	a.SetTrigger("Serve");
+		//	canServe = false;
+		//	BallController.ThrowBall();
+		//}
 		if (Time.time > servingTime + 1.6f)
 		{
 			hitArea.SetActive(true);

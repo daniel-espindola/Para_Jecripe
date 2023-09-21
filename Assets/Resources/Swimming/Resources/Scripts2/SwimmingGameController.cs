@@ -100,6 +100,7 @@ public class SwimmingGameController : MonoBehaviour
 			PauseGame();
 		}
 		//Mobile
+#if MOBILE_INPUT
 		else if (CrossPlatformInputManager.GetButtonDown("P"))
 		{
 			PauseGame();
@@ -113,6 +114,7 @@ public class SwimmingGameController : MonoBehaviour
 		{
 			ArmStroke("right", "rightArmStrokeTrigger");
 		}
+#endif
 		////rotationVector.x = 0;
 	}
 

@@ -29,6 +29,7 @@ public class CanoeTutorialController : MonoBehaviour {
             b2.SetActive(true);
             timer = Time.time;
         }
+#if MOBILE_INPUT
         if (CrossPlatformInputManager.GetButtonDown("Space") && !started)
         {
             started = true;
@@ -36,6 +37,7 @@ public class CanoeTutorialController : MonoBehaviour {
             b2.SetActive(true);
             timer = Time.time;
         }
+#endif
         if (Time.time > timer + 3f){
             b2.SetActive(false);
             b3.SetActive(true);
@@ -46,10 +48,12 @@ public class CanoeTutorialController : MonoBehaviour {
             b2Text.text = "As bóias vermelhas indicam o a reta final. Falta pouco!";
             b2.SetActive(true);
         }
+#if MOBILE_INPUT
         if (CrossPlatformInputManager.GetButtonDown("Space") && finished)
         {
             Application.LoadLevel("CanoeGame");
         }
+#endif
     }
 
     void OnTriggerEnter(Collider c)

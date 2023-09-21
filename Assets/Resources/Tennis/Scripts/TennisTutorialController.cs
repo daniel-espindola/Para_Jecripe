@@ -69,6 +69,7 @@ public class TennisTutorialController : MonoBehaviour
 					b2.SetActive (true);
 					t.SetTimer ();
 				}
+#if MOBILE_INPUT
 				if (CrossPlatformInputManager.GetButtonDown("Return"))
 				{
 					okCount++;
@@ -76,9 +77,10 @@ public class TennisTutorialController : MonoBehaviour
 					b2.SetActive(true);
 					t.SetTimer();
 				}
-			} 
-			
-			
+#endif
+			}
+
+
 		} else if (okCount == 1) {
 		
 			if (t.time > 0.5) {
@@ -179,10 +181,12 @@ public class TennisTutorialController : MonoBehaviour
                 {
                     Application.LoadLevel("TennisGame");
                 }
+#if MOBILE_INPUT
 				if (CrossPlatformInputManager.GetButtonDown("Return"))
 				{
 					Application.LoadLevel("TennisGame");
 				}
+#endif
 			}
 		}	
 	}

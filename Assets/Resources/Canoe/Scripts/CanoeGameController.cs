@@ -53,13 +53,15 @@ public class CanoeGameController : MonoBehaviour {
             startCanvas.SetActive(false);
             canvas.SetActive(true);
         }
+#if MOBILE_INPUT
         if (start == false && CrossPlatformInputManager.GetButtonDown("Space"))
         {
             start = true;
             startCanvas.SetActive(false);
             canvas.SetActive(true);
         }
-        else if(start == true)
+#endif
+        else if (start == true)
         {
             time += Time.deltaTime;
             string timeStr = ((int)time / 60).ToString("00") + ":" + ((int)time % 60).ToString("00") + ":" + (int)((time-(int)time)*100);

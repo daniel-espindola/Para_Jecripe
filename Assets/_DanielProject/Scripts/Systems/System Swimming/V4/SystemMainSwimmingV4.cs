@@ -69,12 +69,13 @@ public class SystemMainSwimmingV4 : MonoBehaviour
                     StartGame();
                 }
                 //Mobile
+#if MOBILE_INPUT
                 if (CrossPlatformInputManager.GetButtonDown("Space"))
                 {
                     StartGame();
                     startButton.SetActive(false);
                 }
-                
+#endif
             }
             else
             {
@@ -90,16 +91,18 @@ public class SystemMainSwimmingV4 : MonoBehaviour
                     isBreathing = false;
                 }
                 //Mobile
+#if MOBILE_INPUT
                 if (CrossPlatformInputManager.GetButtonDown("Space"))
                 {
                     isBreathing = true;
                     Breathing();
                 }
+
                 else if (CrossPlatformInputManager.GetButtonUp("Space"))
                 {
                     isBreathing = false;
                 }
-
+#endif
                 if (currentOxygen <= 0)
                 {
                     if (!isGameOver)
@@ -125,10 +128,12 @@ public class SystemMainSwimmingV4 : MonoBehaviour
                     PauseGame();
                 }
                 //Mobile
+#if MOBILE_INPUT
                 if (CrossPlatformInputManager.GetButtonDown("P"))
                 {
                     PauseGame();
                 }
+#endif
             }
         }
         else
@@ -138,10 +143,12 @@ public class SystemMainSwimmingV4 : MonoBehaviour
                 ResumeGame();
             }
             //Mobile
+#if MOBILE_INPUT
             if (CrossPlatformInputManager.GetButtonDown("P"))
             {
                 ResumeGame();
             }
+#endif
         }
 
         Debug.Log(isVictory);

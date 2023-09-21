@@ -48,7 +48,9 @@ public class CanoePlayerController : MonoBehaviour
         else
         {
             if (Input.GetKeyDown(KeyCode.Space) && rb.velocity == Vector3.zero) start = true;
+#if MOBILE_INPUT
             if (CrossPlatformInputManager.GetButtonDown("Space") && rb.velocity == Vector3.zero) start = true;
+#endif
         }
         Stop();
     }
@@ -88,6 +90,7 @@ public class CanoePlayerController : MonoBehaviour
                 animator.SetTrigger("Paddle");
             }
         }
+#if MOBILE_INPUT
         if (start == true && CrossPlatformInputManager.GetButtonDown("Space"))
         {
             if ((slider.value >= 0.4f && slider.value <= 0.6f) && (rb.velocity.magnitude < maxSpeed))
@@ -113,6 +116,7 @@ public class CanoePlayerController : MonoBehaviour
                 animator.SetTrigger("Paddle");
             }
         }
+#endif
     }
 
     void Stop()

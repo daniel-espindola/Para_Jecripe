@@ -133,6 +133,7 @@ public class veronica_Behaviour : MonoBehaviour
                     rb.velocity += acceleration * -transform.forward;
                 }
             }
+#if MOBILE_INPUT
             if (CrossPlatformInputManager.GetButtonDown("LeftArrow") && pressLeft == true)
             {
                 leftFoot.SetActive(false);
@@ -144,6 +145,7 @@ public class veronica_Behaviour : MonoBehaviour
                 }
                 //Debug.Log("LeftArrow");
             }
+#endif
             else if (Input.GetKeyDown(KeyCode.RightArrow) && pressLeft == false)
             {
                 rightFoot.SetActive(false);
@@ -154,6 +156,7 @@ public class veronica_Behaviour : MonoBehaviour
                     rb.velocity += acceleration * -transform.forward;
                 }
             }
+#if MOBILE_INPUT
             else if (CrossPlatformInputManager.GetButtonDown("RightArrow") && pressLeft == false)
             {
                 rightFoot.SetActive(false);
@@ -165,6 +168,7 @@ public class veronica_Behaviour : MonoBehaviour
                 }
                 Debug.Log("RightArrow");
             }
+#endif
             else if (-rb.velocity.x > 0 && ((Input.GetKeyDown(KeyCode.LeftArrow) && pressLeft == false) || (Input.GetKeyDown(KeyCode.RightArrow) && pressLeft == true)))
             {
                 rb.velocity -= (acceleration / 3) * -transform.forward;
@@ -261,6 +265,7 @@ public class veronica_Behaviour : MonoBehaviour
             jumpFailed = false;
             timer = Time.time;
         }
+#if MOBILE_INPUT
         if (CrossPlatformInputManager.GetButtonDown("Space"))
         {
             vibrationController.VibrateDevice();
@@ -283,6 +288,7 @@ public class veronica_Behaviour : MonoBehaviour
             jumpFailed = false;
             timer = Time.time;
         }
+#endif
     }
 
     private void CalculateJumpDistance()

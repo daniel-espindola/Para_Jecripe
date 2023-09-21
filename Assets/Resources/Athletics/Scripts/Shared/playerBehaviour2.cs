@@ -76,14 +76,18 @@ public class playerBehaviour2 : MonoBehaviour
 
 		t = GetComponent<Timer>();
 
-		fallingCoin = GameObject.Find("FallingCoin").GetComponent<FallingCoin>();
+		//fallingCoin = GameObject.Find("FallingCoin").GetComponent<FallingCoin>();
 
 
 
 
 		Sounds = GameObject.Find("Sounds").GetComponent<AthleticsSounds>();
 
-
+#if MOBILE_INPUT
+				useMobile = true;
+#else
+          useMobile = false;
+#endif
 
 	}
 

@@ -67,11 +67,13 @@ public class SwimminMainPlayerV4 : MonoBehaviour
 				player.transform.rotation = Quaternion.Euler(rotationVector);
 			}
 			//Mobile
+#if MOBILE_INPUT
 			if (CrossPlatformInputManager.GetButtonDown("Space"))
 			{
 				armStrokesOK = true;
 				player.transform.rotation = Quaternion.Euler(rotationVector);
 			}
+#endif
 		}
 		if (!paused)
 		{
@@ -86,6 +88,7 @@ public class SwimminMainPlayerV4 : MonoBehaviour
 					ArmStroke("right", "rightArmStrokeTrigger");
 				}
 				//Mobile
+#if MOBILE_INPUT
 				else if (CrossPlatformInputManager.GetButtonDown("LeftArrow"))
 				{
 					ArmStroke("left", "leftArmStrokeTrigger");
@@ -94,6 +97,7 @@ public class SwimminMainPlayerV4 : MonoBehaviour
 				{
 					ArmStroke("right", "rightArmStrokeTrigger");
 				}
+#endif
 			}
 		}
 		if (normalTutorial == true)
@@ -109,6 +113,7 @@ public class SwimminMainPlayerV4 : MonoBehaviour
 					ArmStroke("right", "rightArmStrokeTrigger");
 				}
 				//Mobile
+#if MOBILE_INPUT
 				if (CrossPlatformInputManager.GetButtonDown("LeftArrow"))
 				{
 					ArmStroke("left", "leftArmStrokeTrigger");
@@ -117,7 +122,7 @@ public class SwimminMainPlayerV4 : MonoBehaviour
 				{
 					ArmStroke("right", "rightArmStrokeTrigger");
 				}
-
+#endif
 			}
 		}
 

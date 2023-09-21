@@ -199,10 +199,10 @@ public class gameControllerYohansson : MonoBehaviour {
 		}
 
 		if( end == true && playerBehaviour2.termina==true && save == false){
-			sD = StoreDataContainer.Load();
-			sD.storeObjects[0].coin += prizecoins;
-			sD.Save();
-			save = true;
+			//sD = StoreDataContainer.Load();
+			//sD.storeObjects[0].coin += prizecoins;
+			//sD.Save();
+			//save = true;
 		}
 
 		result.text = "Parabéns você ganhou "+(playerBehaviour2.bonusnumber+prizecoins) +" moedas!";

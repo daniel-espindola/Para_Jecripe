@@ -56,6 +56,7 @@ public class Swimming_StartGame : MonoBehaviour {
 			t.SetTimer ();
 
 		}
+#if MOBILE_INPUT
 		else if (Time.timeSinceLevelLoad >= 2 && CrossPlatformInputManager.GetButtonDown("Space"))
 		{
 
@@ -69,7 +70,7 @@ public class Swimming_StartGame : MonoBehaviour {
 			t.SetTimer();
 
 		}
-
+#endif
 		else if (t.time >= 1.12f) {
 
 			t.ResetTimer ();
