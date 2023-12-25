@@ -45,11 +45,11 @@ public class MainItem : MonoBehaviour
 
         // Ativa ou desativa o GameObject com base no valor de canActivate
         item.SetActive(canActivate);
-        if(canActivate == true)
+        if (canActivate == true)
         {
             DisableGameObjects(otherGameObjects);
         }
-        
+
     }
 
     public void SetCanActivate(bool value)
@@ -61,12 +61,12 @@ public class MainItem : MonoBehaviour
         PlayerPrefs.SetInt(idItem, canActivate ? 1 : 0);
 
         // Ativa ou desativa o GameObject com base no valor de canActivate
-        gameObject.SetActive(canActivate);       
+        gameObject.SetActive(canActivate);
     }
 
     public void CreateHasKey()
     {
-        PlayerPrefs.SetInt(idItem,0);
+        PlayerPrefs.SetInt(idItem, 0);
     }
 
 

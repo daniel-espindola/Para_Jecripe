@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.SceneManagement;
 using System.Collections;
 
 public class NavegButtons : MonoBehaviour {
@@ -6,57 +7,57 @@ public class NavegButtons : MonoBehaviour {
 	public string scene;
 	
 	public void LoadScene(){
-		Application.LoadLevel (scene);	
+		SceneManager.LoadScene (scene);	
 	}
 	
 	public void LoadMenu(){
-		Application.LoadLevel ("Menu");
+		SceneManager.LoadScene ("Menu");
 	}
 	
 	public void LoadPlayScene(){
-		Application.LoadLevel ("PlayScene");
+		SceneManager.LoadScene ("PlayScene");
 	}
 	
 	public void LoadSports(){
-		Application.LoadLevel ("SportsScene");
+		SceneManager.LoadScene ("SportsScene");
 	}
 	
 	public void LoadTennis(){
-		Application.LoadLevel ("PlayTennis");
+		SceneManager.LoadScene ("PlayTennis");
 	}
 	
 	public void LoadSwimming(){
-		Application.LoadLevel("PlaySwimming");
+		SceneManager.LoadScene("PlaySwimming");
 	}
 	
 	public void LoadAthletics(){
-		Application.LoadLevel ("PlayAthletics");
+		SceneManager.LoadScene ("PlayAthletics");
 	}
 
     public void LoadCanoe()
     {
-        Application.LoadLevel("PlayCanoe");
+        SceneManager.LoadScene("PlayCanoe");
     }
     public void LoadCanoeCuriosities()
     {
-        Application.LoadLevel("Canoe_curiosities");
+        SceneManager.LoadScene("Canoe_curiosities");
     }
     public void LoadTennisGame(){
-		Application.LoadLevel("treino");
+		SceneManager.LoadScene("treino");
 	}
 	
 	public void LoadAthleticsGame(){
-		Application.LoadLevel ("AthleticsGame");
+		SceneManager.LoadScene ("AthleticsGame");
 		
 	}
 
 	public void LoadAthleticsTutorial(){
-		Application.LoadLevel ("AthleticsTutorial");
+		SceneManager.LoadScene ("AthleticsTutorial");
 		
 	}
 	
 	public void LoadSwimmingGame(){
-		Application.LoadLevel("Swimming");
+		SceneManager.LoadScene	("Swimming");
 	}
 	
 	public void LoadQuitGame(){
@@ -64,49 +65,63 @@ public class NavegButtons : MonoBehaviour {
 	}
 	
 	public void LoadQuiz(){
-		Application.LoadLevel("QuizGame");
+		SceneManager.LoadScene("QuizGame");
 	}
 	
 	public void LoadTennisCuriosities(){
 	
-		Application.LoadLevel("TennisCuriosities");
+		SceneManager.LoadScene("TennisCuriosities");
 	}
 	
 	public void LoadAthleticsCuriosities(){
 	
-		Application.LoadLevel("AthleticsCuriosities");
+		SceneManager.LoadScene("AthleticsCuriosities");
 	}
 	
 	public void LoadSwimmingCuriosities(){
-		
-		Application.LoadLevel("SwimmingCuriosities");
+
+        SceneManager.LoadScene("SwimmingCuriosities");
 	}
 	
 	public void LoadCredits(){
-		
-		Application.LoadLevel("Credits");
+
+        SceneManager.LoadScene("Credits");
 	}
 	
 	public void LoadAthleticsAthlete(){
-		Application.LoadLevel("AthleticsAthlete");
+        SceneManager.LoadScene("AthleticsAthlete");
 	}
 	
 	public void LoadSwimmingAthlete(){
-		Application.LoadLevel("SwimmingAthlete");
+        SceneManager.LoadScene("SwimmingAthlete");
 	}
 	
 	public void LoadTennisAthlete(){
-		Application.LoadLevel("TennisAthlete");
+        SceneManager.LoadScene("TennisAthlete");
 	}
 	
 	public void LoadTennisMainGame(){
-		Application.LoadLevel("main");
+        SceneManager.LoadScene("main");
 	}
 	
 	public void LoadTennisGameSelection(){
-		Application.LoadLevel("TennisGameSelection");
+        SceneManager.LoadScene("TennisGameSelection");
 	}
-	
-	
-	
+	public void LoadBasquete()
+	{        
+		SceneManager.LoadScene("Basketball Scene");
+    }
+    public void LoadBasqueteTutorial()
+    {
+        SceneManager.LoadScene("TennisGameSelection");
+    }
+    public void LoadBasqueteSelecte()
+    {
+        SceneManager.LoadScene("PlayBasquete");
+    }
+    public void LoadBasqueteFirula()
+    {
+        SceneManager.LoadScene("BasketballCuriosities");
+    }
+
 }
