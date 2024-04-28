@@ -9,9 +9,9 @@ public class SystemMainNPC : MonoBehaviour
     //PUBLIC
     public ScoreManagerBasketball scoreManager;
     public ThrowObject throwObject;
-    public Transform holdPosition; // A posição onde a bola será mantida quando estiver segurando-a.
+    public Transform holdPosition; // A posiï¿½ï¿½o onde a bola serï¿½ mantida quando estiver segurando-a.
     public MovimentacaoNavMesh movimentacaoNavMesh;
-    public float pickupDistance = 2f; // A distância máxima para pegar a bola. 
+    public float pickupDistance = 2f; // A distï¿½ncia mï¿½xima para pegar a bola. 
     public bool podeGerar;
     public bool getBall;
     public bool inGame;
@@ -20,10 +20,10 @@ public class SystemMainNPC : MonoBehaviour
 
     //PRIVATE
     private static SystemMainNPC systemMainNPC;
-    private Animator animator; // Referência ao Animator.
-    private GameObject heldObject; // Referência para a bola que o jogador está segurando.
+    private Animator animator; // Referï¿½ncia ao Animator.
+    private GameObject heldObject; // Referï¿½ncia para a bola que o jogador estï¿½ segurando.
     private bool isNearBall = false;//Para indicar proximidade com a bola.
-    private bool hasHitAnimationPlayed = false; // Para controlar se a animação "Hit" já foi reproduzida.
+    private bool hasHitAnimationPlayed = false; // Para controlar se a animaï¿½ï¿½o "Hit" jï¿½ foi reproduzida.
     float randomValue;
     GameObject obj;
 
@@ -41,7 +41,7 @@ public class SystemMainNPC : MonoBehaviour
     }
     private void Update()
     {
-        // Restaurar o status da animação "Hit" para que possa ser acionada novamente.
+        // Restaurar o status da animaï¿½ï¿½o "Hit" para que possa ser acionada novamente.
         hasHitAnimationPlayed = false;
 
         if(podeGerar == true)
@@ -50,10 +50,10 @@ public class SystemMainNPC : MonoBehaviour
             GenerateRandomNumber();
         }
 
-        // Atualizar a variável isNearBall com base na proximidade da bola.
+        // Atualizar a variï¿½vel isNearBall com base na proximidade da bola.
         UpdateNearBallStatus();
 
-        // Detecta se o jogador está perto o suficiente da bola para pegá-la.
+        // Detecta se o jogador estï¿½ perto o suficiente da bola para pegï¿½-la.
         if(podePegar == true)
         {
             if (randomValue >= 0.85f && heldObject == null)
@@ -85,7 +85,7 @@ public class SystemMainNPC : MonoBehaviour
     }
     void PickupBall(GameObject ball)
     {
-        ball.GetComponent<Rigidbody>().isKinematic = true; // Impede a bola de cair devido à física.
+        ball.GetComponent<Rigidbody>().isKinematic = true; // Impede a bola de cair devido ï¿½ fï¿½sica.
         ball.transform.position = holdPosition.position;
         ball.transform.parent = transform;
         heldObject = ball;
@@ -93,25 +93,26 @@ public class SystemMainNPC : MonoBehaviour
         //Pegar bolar
         getBall = true;
 
-        // Execute a animação de Hit.
+        // Execute a animaï¿½ï¿½o de Hit.
         animator.SetTrigger("Hit");
 
         // Pare de correr definindo a velocidade para zero.
         animator.SetBool("IsRunning", false);
 
-        // Defina a flag para evitar que a animação seja chamada novamente.
+        // Defina a flag para evitar que a animaï¿½ï¿½o seja chamada novamente.
         hasHitAnimationPlayed = true;
 
         scoreManager.enemy = true;
+        ball.transform.position = holdPosition.position;
     }
     void ReleaseBall()
     {
         podePegar = false;
-        //heldObject.GetComponent<Rigidbody>().isKinematic = false; // Restaura a física da bola.
+        //heldObject.GetComponent<Rigidbody>().isKinematic = false; // Restaura a fï¿½sica da bola.
         heldObject.transform.parent = null;
         heldObject = null;
 
-        // Execute a animação de Hit.
+        // Execute a animaï¿½ï¿½o de Hit.
         animator.SetTrigger("Arremesso");
 
         // Pare de correr definindo a velocidade para zero.
@@ -125,7 +126,7 @@ public class SystemMainNPC : MonoBehaviour
     }
     float GenerateRandomNumber()
     {
-        // Gera um número aleatório entre 0 (inclusive) e 1 (exclusivo).
+        // Gera um nï¿½mero aleatï¿½rio entre 0 (inclusive) e 1 (exclusivo).
         randomValue = Random.Range(0.0f, 1f);
 
         return randomValue;
@@ -161,7 +162,7 @@ public class SystemMainNPC : MonoBehaviour
     {
         Collider[] colliders = Physics.OverlapSphere(transform.position, pickupDistance);
 
-        // Verificar se há uma bola dentro da esfera de colisão.
+        // Verificar se hï¿½ uma bola dentro da esfera de colisï¿½o.
         foreach (Collider collider in colliders)
         {
             if (collider.CompareTag("Ball"))
@@ -171,11 +172,11 @@ public class SystemMainNPC : MonoBehaviour
                     movimentacaoNavMesh.Target();
                 }               
                 isNearBall = true;
-                return; // Se encontrou uma bola, não precisa verificar mais.
+                return; // Se encontrou uma bola, nï¿½o precisa verificar mais.
             }
         }
 
-        // Se não encontrou uma bola, define isNearBall como false.
+        // Se nï¿½o encontrou uma bola, define isNearBall como false.
         isNearBall = false;
     }
     IEnumerator GetBaloObj()
