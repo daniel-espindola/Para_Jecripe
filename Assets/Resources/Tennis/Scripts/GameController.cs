@@ -203,7 +203,7 @@ public class GameController : MonoBehaviour
     /// </summary>
     private void CheckBallBounds()
     {
-        if(bC.isServing == true && ball.transform.position.y < 1) {
+        if(bC.isServing == true && (ball.transform.position.y < 1)) {
             Debug.Log("Forcing Ball to serving position");
             SetBallToServingPosition();
         }
@@ -214,16 +214,16 @@ public class GameController : MonoBehaviour
             Debug.Log($"ball {ball.transform.position}");
             logTimer = 0f; // Reset the timer
         }
-        if (ball != null && ballRB != null)
-        {
-            // Check if the ball is below ground level or outside the allowed z-axis range
-            if (ball.transform.position.y < 0 || ball.transform.position.z < -20 || ball.transform.position.z > 20)
-            {
-                Debug.Log("Resetting round. Resetting ball position and scores.");
-                // Logic to move to the next round
-                StartGame();
-            }
-        }
+        //if (ball != null && ballRB != null)
+        //{
+        //    // Check if the ball is below ground level or outside the allowed z-axis range
+        //    if (ball.transform.position.y < 0 || ball.transform.position.z < -20 || ball.transform.position.z > 20)
+        //    {
+        //        Debug.Log("Resetting round. Resetting ball position and scores.");
+        //        // Logic to move to the next round
+        //        StartGame();
+        //    }
+        //}
     }
 
     public void AddBounce()
@@ -389,10 +389,15 @@ public class GameController : MonoBehaviour
         Debug.Log($"Game Started Serve = {serve} {servingSide}, ball {ball.transform.position}");
     }
 
-    private void SetBallToServingPosition() {
-        ball.transform.position = servingSide == 1 ? new Vector3(serve * 2.127f, 1.6f, -serve * 12.01f)
+    private Vector3 GetBallToServingPosition() {
+        return servingSide == 1 ? new Vector3(serve * 2.127f, 1.6f, -serve * 12.01f)
                                                 : new Vector3(-serve * 1.87f, 1.6f, -serve * 12.01f);
     }
+
+    private void SetBallToServingPosition() {
+        ball.transform.position = GetBallToServingPosition(); 
+    }
+
     private void SetInitialPositions()
     {
         // Set initial positions for player and enemy based on serving side

@@ -18,6 +18,8 @@ public class SwimminMainPlayerV4 : MonoBehaviour
 	Vector3 movement;
 	Vector3 maxvel;
 
+	public GameObject left;	
+	public GameObject right;	
 
 	Vector3 rotationVector;
 
@@ -145,6 +147,13 @@ public class SwimminMainPlayerV4 : MonoBehaviour
 
 			player.transform.rotation = Quaternion.Euler(rotationVector);
 
+			if(thisSide == "left") {
+				left.SetActive(false);
+				right.SetActive(true);
+			} else {
+				left.SetActive(true);
+				right.SetActive(false);
+			}
 		}
 		else
 		{

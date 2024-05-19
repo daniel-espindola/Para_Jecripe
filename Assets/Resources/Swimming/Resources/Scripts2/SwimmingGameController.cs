@@ -23,6 +23,9 @@ public class SwimmingGameController : MonoBehaviour
 	public Text place1;
 	public Text place2;
 	public Text place3;
+	
+	public GameObject left;	
+	public GameObject right;	
 	[Header("Game Controller")]
 	public bool isMasculine = true;
 	public bool b1 = false;
@@ -134,6 +137,13 @@ public class SwimmingGameController : MonoBehaviour
 			armStrokeCount++;
 			WaterParticleSystem(thisSide);
 
+			if(thisSide == "left") {
+				left.SetActive(false);
+				right.SetActive(true);
+			} else {
+				left.SetActive(true);
+				right.SetActive(false);
+			}
 
             //player.GetComponent<Transform>().eulerAngles = new Vector3(0,0,0);
             player.transform.rotation = Quaternion.Euler(rotationVector);
