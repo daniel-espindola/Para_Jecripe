@@ -57,7 +57,7 @@ public class PlayerController : MonoBehaviour
 		{
 			Mover();
 		}
-		Debug.Log(servingTime);
+		//Debug.Log(servingTime);
 	}
 
 

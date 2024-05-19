@@ -73,6 +73,8 @@ public class GameController : MonoBehaviour
     public GameObject canvas;
 
     GameObject pauseCanvas;
+    
+    private float logTimer = 0f; // Timer for logging every 10 seconds
 
     void Start()
     {
@@ -117,7 +119,7 @@ public class GameController : MonoBehaviour
         playerSetCount = 0;
         enemySetCount = 0;
         serve = 1;
-
+        
         pS.text = playerSetCount + "";
         pG.text = playerGameCount + "";
         pP1.text = score[playerScore] + "";
@@ -130,6 +132,7 @@ public class GameController : MonoBehaviour
         points = 0;
         SetPoints();
 
+        Debug.Log($"Ready. Serve = {serve} {servingSide}");
         StartGame();
     }
 
@@ -190,6 +193,35 @@ public class GameController : MonoBehaviour
                 {
                     eC.canServe = true;
                 }
+            }
+        }
+        CheckBallBounds();
+    }
+
+    /// <summary>
+    /// Checks if the ball is out of the designated play area and resets the round if necessary.
+    /// </summary>
+    private void CheckBallBounds()
+    {
+        if(bC.isServing == true && ball.transform.position.y < 1) {
+            Debug.Log("Forcing Ball to serving position");
+            SetBallToServingPosition();
+        }
+
+        logTimer += Time.deltaTime;
+        if (logTimer >= 10f)
+        {
+            Debug.Log($"ball {ball.transform.position}");
+            logTimer = 0f; // Reset the timer
+        }
+        if (ball != null && ballRB != null)
+        {
+            // Check if the ball is below ground level or outside the allowed z-axis range
+            if (ball.transform.position.y < 0 || ball.transform.position.z < -20 || ball.transform.position.z > 20)
+            {
+                Debug.Log("Resetting round. Resetting ball position and scores.");
+                // Logic to move to the next round
+                StartGame();
             }
         }
     }
@@ -339,9 +371,31 @@ public class GameController : MonoBehaviour
 
     private void StartGame()
     {
+        Debug.Log($"************ Starting new game. Ball and players are reset. Serve = {serve} {servingSide}");
         inGame = true;
-        ball.SetActive(true);
+        ball.SetActive(true); // Make sure the ball is active
 
+        // Reset ball physics
+        ballRB.velocity = Vector3.zero;
+        ballRB.angularVelocity = Vector3.zero; // Reset any rotation
+        ballRB.useGravity = false;
+        bC.isServing = true;
+
+        // Set player and enemy initial positions and states
+        SetInitialPositions();
+
+        // Reset scores or game state as needed here
+        
+        Debug.Log($"Game Started Serve = {serve} {servingSide}, ball {ball.transform.position}");
+    }
+
+    private void SetBallToServingPosition() {
+        ball.transform.position = servingSide == 1 ? new Vector3(serve * 2.127f, 1.6f, -serve * 12.01f)
+                                                : new Vector3(-serve * 1.87f, 1.6f, -serve * 12.01f);
+    }
+    private void SetInitialPositions()
+    {
+        // Set initial positions for player and enemy based on serving side
         Vector3 pStartPosition = new Vector3(2f * servingSide, 0.519f, -12.47f);
         player.transform.position = pStartPosition;
         player.transform.rotation = Quaternion.Euler(0f, 180f, 0f);
@@ -350,37 +404,41 @@ public class GameController : MonoBehaviour
         enemy.transform.position = eStartPosition;
         enemy.transform.rotation = Quaternion.Euler(0f, 0f, 0f);
 
-        ballRB.velocity = Vector3.zero;
-        ballRB.useGravity = false;
-        bC.isServing = true;
 
+        Debug.Log($"Changing ball to serve {serve}. ball {ball.transform.position}");
+        // Reset ball position based on the serving side
+        SetBallToServingPosition();
+        
+        // Activate serving logic based on who is serving
         if (serve == 1)
         {
             pC.isServing = true;
             pHitArea.SetActive(false);
-            Vector3 serveTarget = new Vector3(-servingSide * 2.5f, 0f, 3.5f);
-            playerTarget.transform.position = serveTarget;
+            playerTarget.transform.position = new Vector3(-servingSide * 2.5f, 0f, 3.5f);
             playerTurn = true;
-        }
-        else if (serve == -1)
-        {
-            eC.isServing = true;
-            eHitArea.SetActive(false);
-            Vector3 serveTarget = new Vector3(servingSide * 2.5f, 0f, -3.5f);
-            enemyTarget.transform.position = serveTarget;
-            playerTurn = false;
-        }
-
-        if (servingSide == 1)
-        {
-            ball.transform.position = new Vector3(serve * 2.127f, 1.6f, -serve * 12.01f);
         }
         else
         {
-            ball.transform.position = new Vector3(-serve * 1.87f, 1.6f, -serve * 12.01f);
+            eC.isServing = true;
+            eHitArea.SetActive(false);
+            enemyTarget.transform.position = new Vector3(servingSide * 2.5f, 0f, -3.5f);
+            playerTurn = false;
         }
 
-        servingSide *= -1;
+        StartCoroutine(UpdateBallPositionAfterDelay(0.3f));
+    }
+
+    
+    IEnumerator UpdateBallPositionAfterDelay(float delayInSeconds)
+    {
+        Debug.Log($"Ball position before delay=  {ball.transform.position}");
+        // Wait for the specified delay
+        yield return new WaitForSeconds(delayInSeconds);
+
+        // Code to update the ball position after the delay
+        SetBallToServingPosition();
+        Debug.Log($"Ball position updated after 100ms delay. Ball=  {ball.transform.position}");
+        servingSide *=-1;
     }
 
     public void PlayerSideHit()
